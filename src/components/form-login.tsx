@@ -8,7 +8,7 @@ export default function LoginComponent() {
             <h2 className='text-2xl font-semibold'>Ingresá a Justina.io</h2>
             <div className='flex flex-col gap-5'>
                 <Input type='email' placeholder='Ingrese email' color='secondary' autoComplete='off' />
-                <Input type='password' placeholder='Ingrese email' color='secondary' autoComplete='off' />
+                <Input type='password' placeholder='Ingrese contraseña' color='secondary' autoComplete='off' />
             </div>
 
             <div className='flex justify-end text-purple-800'>Olvidé mi contraseña</div>
