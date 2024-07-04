@@ -3,6 +3,7 @@ import { Button, Input } from '@nextui-org/react'
 import Link from 'next/link'
 import { FiLogIn } from 'react-icons/fi'
 import { RiUserAddLine } from 'react-icons/ri'
+import ResetPassword from './reset-pasword'
 
 export default function LoginComponent() {
     // PENDING: handleSubmit, useStates
@@ -13,7 +14,7 @@ export default function LoginComponent() {
                 <Input type='password' placeholder='Ingrese contraseña' color='secondary' autoComplete='off' />
             </div>
 
-            <div className='flex justify-end text-purple-800'>Olvidé mi contraseña</div>
+            <ResetPassword />
 
             <div className='flex flex-col gap-3'>
                 <Button color='secondary'>
