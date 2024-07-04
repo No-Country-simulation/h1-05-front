@@ -1,6 +1,7 @@
 'use client'
 
 import { Button, Input, Select, SelectItem } from '@nextui-org/react'
+import { useRouter } from 'next/navigation'
 const especialidad = [
     {
         label: 'Doctor',
@@ -12,6 +13,7 @@ const especialidad = [
 
 export default function RegisterComponent() {
     // PENDING: handleSubmit, useStates
+    const route = useRouter()
     return (
         <form>
             <div className='grid gap-5 grid-cols-1 md:grid-cols-2 mb-5'>
@@ -38,9 +40,13 @@ export default function RegisterComponent() {
                 <Input type='password' name='passwordRepeat' label='Confirmar Contraseña' />
             </div>
 
-            <div className='mt-4 flex flex-col gap-3 md:flex-row-reverse md:gap-5'>
-                <Button type='submit'>Registrar</Button>
-                <Button>Volver</Button>
+            <div className='mt-4 flex flex-col gap-3 md:flex-row md:justify-between md:gap-5'>
+                <Button color='warning' onClick={() => route.back()}>
+                    Volver
+                </Button>
+                <Button color='secondary' type='submit'>
+                    Crear cuenta
+                </Button>
             </div>
         </form>
     )
