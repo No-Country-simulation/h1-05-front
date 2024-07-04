@@ -1,6 +1,7 @@
 import LoginComponent from '@/components/form-login'
 import { Image } from '@nextui-org/react'
 
+
 export default function LoginPage() {
     return (
         <div className='flex flex-col items-center justify-center p-6 mx-auto lg:py-0'>
@@ -12,6 +13,7 @@ export default function LoginPage() {
                         <h2 className='text-2xl font-semibold'>Ingresá a Justina.io</h2>
                         <LoginComponent />
                     </div>
+                    
                 </div>
             </div>
         </div>
