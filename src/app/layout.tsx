@@ -17,8 +17,10 @@ export default function RootLayout({
 }>) {
     return (
         <html lang='es'>
-            <body className={inter.className}>
-                <NextUIProvider>{children}</NextUIProvider>
+            <body className={`${inter.className} bg-slate-50`}>
+                <NextUIProvider>
+                    <main>{children}</main>
+                </NextUIProvider>
             </body>
         </html>
     )
