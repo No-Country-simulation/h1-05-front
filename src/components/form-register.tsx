@@ -2,16 +2,12 @@
 
 import { Button, Input, Select, SelectItem } from '@nextui-org/react'
 import { useRouter } from 'next/navigation'
-const especialidad = [
-    {
-        label: 'Doctor',
-    },
-    {
-        label: 'Enfermero',
-    },
-]
+import { registerSchema, mappedEspecialidades } from '@/validations/registerSchema'
 
 export default function RegisterComponent() {
+    const especialidadesOptions = Object.entries(mappedEspecialidades).map(([key, value]) => (
+        <SelectItem value={key} key={key}>{value}</SelectItem>
+      ))
     // PENDING: handleSubmit, useStates
     const route = useRouter()
     return (
@@ -25,15 +21,11 @@ export default function RegisterComponent() {
 
             <div className='grid gap-5 grid-cols-1 md:grid-cols-2'>
                 <Select label='Especialidad' className='max-w-xs' selectionMode='multiple'>
-                    {especialidad.map((animal) => (
-                        <SelectItem key={animal.label}>{animal.label}</SelectItem>
-                    ))}
+                    {especialidadesOptions}
                 </Select>
-                <Select label='Ciudad' className='max-w-xs'>
-                    {especialidad.map((animal) => (
-                        <SelectItem key={animal.label}>{animal.label}</SelectItem>
-                    ))}
-                </Select>
+                {/* <Select label='Ciudad' className='max-w-xs' selectionMode='multiple'>                    
+                    {especialidadesOptions}
+                </Select> */}
                 <Input type='email' name='email' label='Email' placeholder='nombre@dominio.com' />
                 <Input type='email' name='emailRepeat' label='Confirmar Email' placeholder='nombre@dominio.com' />
                 <Input type='password' name='password' label='Contraseña' />
