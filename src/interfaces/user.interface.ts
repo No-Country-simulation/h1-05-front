@@ -23,10 +23,11 @@ export type Medico = Usuario & {
 }
 
 export type Usuario = {
-    id: string
+    id: number
+    img: string
     name: string
     lastname: string
-    phoneNumber: string
+    phoneNumber: number
     ciudad: string
     email: string
     role: 'medico' | 'paciente' | 'administrador'
