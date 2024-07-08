@@ -49,3 +49,12 @@ export type Financiador = {
     descripcion: string
     personalMedicoId: number
 }
+
+export type Evento = {
+    id: number
+    medicoID: number
+    pacienteID: number
+    fecha: Date // formato fecha completo incluye hora
+    lugar: Entidad
+    estado: 'pendiente' | 'completado' | 'cancelado'
+}
