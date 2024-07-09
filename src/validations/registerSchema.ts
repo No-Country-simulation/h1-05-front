@@ -4,7 +4,7 @@ const especialidades = ['doctor', 'enfermero', 'radiologo', 'kinesiologo'] as co
 
 export type Especialidades = (typeof especialidades)[number]
 
-export const mappedEspecialidades: {[key in Especialidades]: string} = {
+export const mappedEspecialidades: { [key in Especialidades]: string } = {
     "doctor": 'Doctor',
     "enfermero": 'Enfermero',
     "radiologo": 'Radiologo',
@@ -20,32 +20,32 @@ export const registerSchema = z.object({
         .min(2, { message: 'El apellido debe ser mínimo de 2 caracteres' }),
     phoneNumber: z
         .string()
-        .refine(phoneNumber => !isNaN(parseInt(phoneNumber)),{message: 'Debe ser un número de celular'}),
+        .refine(phoneNumber => !isNaN(parseInt(phoneNumber)), { message: 'Debe ser un número de celular' }),
     medicalLicense: z
         .string()
-        .min(2, { message: 'La licencia medica debe ser mínimo de 4 caracteres' }),
+        .min(4, { message: 'La licencia medica debe ser mínimo de 4 caracteres' }),
+    dni: z
+        .string()
+        .min(8, { message: 'El DNI es de 8 caracteres' }),
     especialidad: z
         .enum(especialidades, {
-            errorMap: () => ({message: "Por favor selecciona una especialidad"}),
+            errorMap: () => ({ message: "Por favor selecciona una especialidad" }),
         }),
+    location: z
+        .string()
+        .min(4, { message: 'Mínimo 4 caracteres' }),
     email: z
         .string()
-        .email({ message: 'Ingrese un correo valido' }),
-    confirmEmail: z
-        .string()
-        .email({ message: 'Ingrese un correo valido de confirmación' })
-        .refine(data => JSON.parse(data).email === JSON.parse(data).confirmEmail, {
-            message: 'No coincide el correo',
-            path: ['email', 'confirmEmail'],
-          }),
+        .email({ message: 'Ingrese un correo valido' })
+        .trim(),
     password: z
         .string()
         .min(6, { message: 'La contraseña debe ser mínimo de 6 caracteres' }),
     confirmPassword: z
         .string()
-        .min(6, { message: 'La contraseña debe ser mínimo de 6 caracteres' })
-        .refine(data => JSON.parse(data).password === JSON.parse(data).confirmPassword, {
-            message: 'La contraseña no coincide',
-            path: ['password', 'confirmPassword'],
-          }),
-})
+    .min(6, { message: 'La contraseña no coincide' }),
+
+}).refine((data) => data.password === data.confirmPassword, {
+    message: 'Las contraseñas no coinciden', // Spanish message for mismatch
+    path: ['confirmPassword'], // Set error path for both fields
+});

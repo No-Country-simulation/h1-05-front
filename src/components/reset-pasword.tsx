@@ -28,7 +28,7 @@ export default function ResetPassword() {
 
     return (
         <>
-            <div className='flex justify-end text-purple-800 hover:cursor-pointer' onClick={onOpenChange}>
+            <div className='ml-auto text-purple-800 hover:cursor-pointer' onClick={onOpenChange}>
                 Olvidé mi contraseña
             </div>
             <Modal isOpen={isOpen} onOpenChange={onOpenChange} backdrop='blur'>
