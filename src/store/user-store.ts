@@ -1,11 +1,13 @@
+import { Medico, Paciente } from '@/interfaces/user.interface'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
 interface UserStore {
-    user: null | string //string de momento, despues cambia a objeto con propiedades
+    user: null | Medico | Paciente
     loadingStore: boolean
     setLoadingStore: (value: boolean) => void
-    setUser: (user: string) => void
+    setUser: (user: Medico | Paciente) => void
+    cerrarSesion: () => void
 }
 
 export const userStore = create(
@@ -14,7 +16,8 @@ export const userStore = create(
             user: null,
             loadingStore: true,
             setLoadingStore: (value) => set({ loadingStore: value }),
-            setUser: (user: string) => set({ user: user }),
+            setUser: (user) => set({ user: user }),
+            cerrarSesion: () => set({ user: null }),
         }),
         {
             name: 'user-localstorage',

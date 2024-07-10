@@ -9,80 +9,133 @@ import { registerSchema, mappedEspecialidades } from '@/validations/registerSche
 import { ZodType } from 'zod'
 
 type Inputs = {
-    name: string;
-    lastname: string;
-    phoneNumber: string;
-    medicalLicense: string;
-    dni: string;    
-    especialidad: string;
-    location: string;
-    email: string;
-    confirmEmail: string;
-    password: string;
-    confirmPassword: string;
+    name: string
+    lastname: string
+    phoneNumber: string
+    medicalLicense: string
+    dni: string
+    especialidad: string
+    location: string
+    email: string
+    confirmEmail: string
+    password: string
+    confirmPassword: string
 }
 
 export default function RegisterComponent() {
-    const { register, handleSubmit, formState: { errors } } = useForm<Inputs>({
-        resolver: zodResolver(registerSchema)
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+        getValues,
+    } = useForm<Inputs>({
+        resolver: zodResolver(registerSchema),
     })
 
     const especialidadesOptions = Object.entries(mappedEspecialidades).map(([key, value]) => (
-        <SelectItem value={key} key={key}>{value}</SelectItem>
+        <SelectItem value={key} key={key}>
+            {value}
+        </SelectItem>
     ))
     // PENDING: handleSubmit, useStates
     const route = useRouter()
     return (
-        <form onSubmit={handleSubmit(data => console.log(data))}>
+        <form onSubmit={handleSubmit((data) => console.log(data))}>
             <div className='grid gap-5 grid-cols-1 md:grid-cols-2 mb-5'>
                 <div>
-                    <Input type='text' label='Nombre' {...register('name')} />
-                    {errors.name?.message && <p className='text-red-500 pt-2 text-sm'>{errors.name?.message}</p>}
+                    <Input
+                        type='text'
+                        errorMessage={errors.name?.message}
+                        isInvalid={errors.name?.message ? true : false}
+                        label='Nombre'
+                        {...register('name')}
+                    />
                 </div>
                 <div>
-                    <Input label='Apellido' {...register('lastname')} />
-                    {errors.lastname?.message && <p className='text-red-500 pt-2 text-sm'>{errors.lastname?.message}</p>}
+                    <Input
+                        errorMessage={errors.lastname?.message}
+                        isInvalid={errors.lastname?.message ? true : false}
+                        label='Apellido'
+                        {...register('lastname')}
+                    />
                 </div>
                 <div>
-                    <Input label='Teléfono' {...register('phoneNumber')} />
-                    {errors.phoneNumber?.message && <p className='text-red-500 pt-2 text-sm'>{errors.phoneNumber?.message}</p>}
+                    <Input
+                        errorMessage={errors.phoneNumber?.message}
+                        isInvalid={errors.phoneNumber?.message ? true : false}
+                        label='Teléfono'
+                        {...register('phoneNumber')}
+                    />
                 </div>
                 <div>
-                    <Input label='Nº Matrícula' {...register('medicalLicense')} />
-                    {errors.medicalLicense?.message && <p className='text-red-500 pt-2 text-sm'>{errors.medicalLicense?.message}</p>}
+                    <Input
+                        errorMessage={errors.medicalLicense?.message}
+                        isInvalid={errors.medicalLicense?.message ? true : false}
+                        label='Nº Matrícula'
+                        {...register('medicalLicense')}
+                    />
                 </div>
                 <div>
-                    <Input label='DNI/Documento' {...register('dni')} />
-                    {errors.dni?.message && <p className='text-red-500 pt-2 text-sm'>{errors.dni?.message}</p>}
+                    <Input
+                        errorMessage={errors.dni?.message}
+                        isInvalid={errors.dni?.message ? true : false}
+                        label='DNI/Documento'
+                        {...register('dni')}
+                    />
                 </div>
                 <div>
-                    <Input label='Location' {...register('location')} />
-                    {errors.location?.message && <p className='text-red-500 pt-2 text-sm'>{errors.location?.message}</p>}
+                    <Input
+                        errorMessage={errors.location?.message}
+                        isInvalid={errors.location?.message ? true : false}
+                        label='Location'
+                        {...register('location')}
+                    />
                 </div>
-                
-            {/* </div>
+
+                {/* </div>
 
             <div className='grid gap-5 grid-cols-1 md:grid-cols-2'> */}
                 <div>
-                    <Select label='Especialidad' className='max-w-xs' selectionMode='multiple' {...register('especialidad')}>
+                    <Select
+                        errorMessage={errors.especialidad?.message}
+                        isInvalid={errors.especialidad?.message ? true : false}
+                        label='Especialidad'
+                        className='max-w-xs'
+                        selectionMode='multiple'
+                        {...register('especialidad')}
+                    >
                         {especialidadesOptions}
-                    </Select>
-                    {errors.especialidad?.message && <p className='text-red-500 pt-2 text-sm'>{errors.especialidad?.message}</p>}
+                    </Select>{' '}
                 </div>
                 <div>
-                    <Input type='email' label='Email' placeholder='nombre@dominio.com' {...register('email')} />
-                    {errors.email?.message && <p className='text-red-600'>{errors.email?.message}</p>}
+                    <Input
+                        type='email'
+                        errorMessage={errors.email?.message}
+                        isInvalid={errors.email?.message ? true : false}
+                        label='Email'
+                        placeholder='nombre@dominio.com'
+                        {...register('email')}
+                    />{' '}
                 </div>
 
                 <div>
-                    <Input type='password' label='Contraseña' {...register('password')} />
-                    {errors.password?.message && <p className='text-red-500 pt-2 text-sm'>{errors.password?.message}</p>}
+                    <Input
+                        isInvalid={errors.password?.message ? true : false}
+                        errorMessage={errors.password?.message}
+                        type='password'
+                        label='Contraseña'
+                        {...register('password')}
+                    />
                 </div>
                 <div>
-                    <Input type='password' label='Confirmar Contraseña' {...register('confirmPassword')} />
-                    {errors.confirmPassword?.message && <p className='text-red-500 pt-2 text-sm'>{errors.confirmPassword?.message}</p>}
+                    <Input
+                        isInvalid={getValues().password !== getValues().confirmPassword}
+                        errorMessage='Las contraseñas no coinciden'
+                        type='password'
+                        label='Confirmar Contraseña'
+                        {...register('confirmPassword')}
+                    />
                 </div>
-
             </div>
 
             <div className='mt-4 flex flex-col gap-3 md:flex-row md:justify-between md:gap-5'>

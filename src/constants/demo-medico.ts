@@ -10,7 +10,7 @@ export const medico: Medico = {
         tipo: 'Transplantes',
     },
     especialidadId: 1234132,
-    lastname: 'Gutierrez',
+    lastname: 'Espinoza',
     name: 'Iñaki',
     phoneNumber: 529898989898,
     role: 'medico',
