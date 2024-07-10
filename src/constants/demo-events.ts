@@ -4,13 +4,17 @@ export const eventos: Evento[] = [
     {
         id: 1,
         medicoID: 987654,
-        pacienteID: 3001,
+        pacienteID: 3001, // no es lo ideal
+        // paciente: {
+        // factorSanguineo: "A+"
+        // ...otras props
+        // }
         fecha: new Date('2024-07-11T08:00:00.000Z'),
         lugar: {
             id: 1,
             descripcion: 'Clínica San Pedro',
         },
-        estado: 'completado',
+        estado: 'cancelado',
     },
     {
         id: 2,
@@ -21,7 +25,7 @@ export const eventos: Evento[] = [
             id: 2,
             descripcion: 'Centro Médico Los Álamos',
         },
-        estado: 'pendiente',
+        estado: 'cancelado',
     },
     {
         id: 3,

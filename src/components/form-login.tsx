@@ -13,51 +13,51 @@ import { loginSchema } from '@/validations/loginSchema'
 import { ImEye } from 'react-icons/im'
 import { PiEyeClosed } from 'react-icons/pi'
 import { useState } from 'react'
+import { Medico } from '@/interfaces/user.interface'
+import { medico } from '@/constants/demo-medico'
 
 type Inputs = {
-    email: string;
-    password: string;
+    email: string
+    password: string
 }
 
 export default function LoginForm() {
     // PENDING: handleSubmit, useStates
     const { user, setUser } = userStore()
-    const { register, handleSubmit, formState: { errors } } = useForm<Inputs>({
-        resolver: zodResolver(loginSchema)
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm<Inputs>({
+        resolver: zodResolver(loginSchema),
     })
-    console.log(errors)
+
     const route = useRouter()
     const [showPass, setShowPass] = useState(false)
 
-    // const handleSubmit = () => {
-    //     if (user) {
-    //         route.push('/dashboard')
-    //     } else {
-    //         console.log('no hubo login')
-    //     }
-    // }
+    const submitData = (data: Inputs) => {
+        // info del user viene de la db
+        // hacer fetch
+        console.log('todos los campos son validos')
+        setUser(medico)
+        route.push('/dashboard')
+    }
 
     return (
-        <form className='flex flex-col gap-4' onSubmit={handleSubmit(data => {
-            console.log(data)
-            if (user) {
-                route.push('/dashboard')
-            } else {
-                console.log('no hubo login')
-            }
-        })}>
+        <form className='flex flex-col gap-4' onSubmit={handleSubmit(submitData)}>
             <div className='flex flex-col gap-5'>
                 <div>
                     <Input
+                        isInvalid={errors.email?.message ? true : false}
+                        errorMessage={errors.email?.message}
                         type='email'
                         placeholder='Ingrese email'
                         label='Correo'
                         color='secondary'
                         autoComplete='off'
-                        // onChange={(e) => setUser(e.target.value)} 
+                        // onChange={(e) => setUser(e.target.value)}
                         {...register('email')}
                     />
-                    {errors.email?.message && <p className='text-red-500 pt-2 text-sm'>{errors.email?.message}</p>}
                 </div>
 
                 <div>
@@ -67,6 +67,8 @@ export default function LoginForm() {
                         label='Contraseña'
                         color='secondary'
                         autoComplete='off'
+                        isInvalid={errors.password?.message ? true : false}
+                        errorMessage={errors.password?.message}
                         endContent={
                             <button className='focus:outline-none' type='button' onClick={() => setShowPass(!showPass)}>
                                 {showPass ? (
@@ -78,14 +80,13 @@ export default function LoginForm() {
                         }
                         {...register('password')}
                     />
-                    {errors.password?.message && <p className='text-red-500 pt-2 text-sm'>{errors.password?.message}</p>}
                 </div>
             </div>
 
             <ResetPassword />
 
             <div className='flex flex-col gap-3'>
-                <Button color='secondary' type="submit">
+                <Button color='secondary' type='submit'>
                     <FiLogIn className='text-xl' />
                     <p>Ingresar</p>
                 </Button>
