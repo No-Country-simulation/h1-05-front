@@ -6,7 +6,6 @@ import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { registerSchema, mappedEspecialidades } from '@/validations/registerSchema'
-import { ZodType } from 'zod'
 
 type Inputs = {
     name: string
