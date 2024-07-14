@@ -1,15 +1,27 @@
 'use client'
 
-import { Autocomplete, AutocompleteItem, Button, Input, Radio, RadioGroup, Select, SelectItem } from '@nextui-org/react'
+import {
+    Autocomplete,
+    AutocompleteItem,
+    Button,
+    Input,
+    Radio,
+    RadioGroup,
+    Select,
+    Selection,
+    SelectItem,
+    Slider,
+} from '@nextui-org/react'
 import { useRouter } from 'next/navigation'
 
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { registerSchema } from '@/validations/registerSchema'
 import { GrNext, GrPrevious } from 'react-icons/gr'
-import { useState } from 'react'
+import { FormEvent, useEffect, useState } from 'react'
 import { Ciudades, municipios_arg } from '@/constants/nomenclaturas/municipios_arg'
 import { especialidades } from '@/constants/nomenclaturas/especialidades'
+import { BiSolidLock, BiSolidLockOpen } from 'react-icons/bi'
 
 type Inputs = {
     name: string
@@ -17,8 +29,9 @@ type Inputs = {
     phoneNumber: string
     medicalLicense: string
     dni: string
-    especialidad: string
-    location: string
+    especialidad: string[]
+    provincia: string
+    ciudad: string
     email: string
     confirmEmail: string
     password: string
@@ -27,11 +40,17 @@ type Inputs = {
 
 export default function RegisterComponent() {
     const [step, setStep] = useState<1 | 2>(1)
+    const [passPower, setPassPower] = useState(0)
+    const [passColor, setPassColor] = useState<'danger' | 'warning' | 'success'>('danger')
+    const [role, setRole] = useState('medico')
     const {
         register,
         handleSubmit,
         formState: { errors },
         getValues,
+        setValue,
+        trigger,
+        watch,
     } = useForm<Inputs>({
         resolver: zodResolver(registerSchema),
     })
@@ -43,24 +62,71 @@ export default function RegisterComponent() {
 
     const [ciudades, setCiudades] = useState<Ciudades[]>([])
 
-    const handleSelectChange = (provincia: string) => {
+    const handleProvinciaSelect = (provincia: string) => {
         if (!provincia) {
             setCiudades([])
+            setValue('ciudad', '')
+            setValue('provincia', '')
         } else {
+            setValue('provincia', provincia)
             const ciudades: Ciudades[] = municipios_arg[provincia]
             setCiudades(ciudades)
         }
+        trigger('provincia')
     }
+
+    const handleCiudadSelect = (ciudad: string) => {
+        if (!ciudad) {
+            setValue('ciudad', '')
+        } else {
+            setValue('ciudad', ciudad)
+        }
+        trigger('ciudad')
+    }
+
+    const handleSelectEspecialidad = (keys: Selection) => {
+        const arrEsp = Array.from(keys) as string[]
+        setValue('especialidad', arrEsp)
+        trigger('especialidad')
+    }
+
+    const validatePassword = (password: string): number => {
+        let score = 0
+        if (password.length >= 7) score += 1 // Al menos 7 caracteres
+        if (password.length >= 11) score += 1 // Al menos 11 caracteres
+        if (/[A-Z]/.test(password)) score += 1 // Contiene letras mayúsculas
+        if (/[a-z]/.test(password)) score += 1 // Contiene letras minúsculas
+        if (/\d/.test(password)) score += 1 // Contiene números
+        if (/[@$!%*?&]/.test(password)) score += 1 // Contiene caracteres especiales
+        return score
+    }
+
+    useEffect(() => {
+        const pass = getValues('password')
+        const score = validatePassword(pass || '')
+        setPassPower(score)
+        if (score <= 2) setPassColor('danger')
+        else if (score <= 4) setPassColor('warning')
+        else setPassColor('success')
+    }, [watch('password')])
+
     return (
         <form onSubmit={handleSubmit(handleFormSend)}>
             {step === 1 && (
-                <RadioGroup label='Selecciona tipo de cuenta:' className='mb-4' color='secondary' defaultValue='medico'>
+                <RadioGroup
+                    orientation='horizontal'
+                    onValueChange={(value) => setRole(value)}
+                    label='Selecciona tipo de cuenta:'
+                    className='mb-4'
+                    color='secondary'
+                    defaultValue={role}
+                >
                     <Radio value='medico'>Médico</Radio>
                     <Radio value='paciente'>Paciente</Radio>
-                    {/* <Radio value='entidad'>Entidad/Clínica/Hospital</Radio> */}
+                    <Radio value='clinica'>Clínica/Hospital</Radio>
                 </RadioGroup>
             )}
-            {step === 1 ? (
+            {step === 1 && (
                 <div className='grid gap-5 grid-cols-1 mb-5'>
                     <Input
                         color='secondary'
@@ -101,8 +167,38 @@ export default function RegisterComponent() {
                         label='Confirmar Contraseña'
                         {...register('confirmPassword')}
                     />
+                    <Slider
+                        size='md'
+                        color={passColor}
+                        value={passPower}
+                        minValue={0}
+                        maxValue={6}
+                        hideThumb
+                        hideValue
+                        startContent={<BiSolidLockOpen className='text-2xl text-red-700' />}
+                        endContent={<BiSolidLock className='text-2xl text-green-700' />}
+                        className='pointer-events-none mx-auto'
+                        defaultValue={0}
+                        label={
+                            passPower === 0
+                                ? 'Escriba contraseña'
+                                : passPower === 1
+                                ? 'Contraseña insuficiente'
+                                : passPower === 2
+                                ? 'Fácilmente hackeable'
+                                : passPower === 3
+                                ? 'Mínimo de seguridad'
+                                : passPower === 4
+                                ? 'Contraseña aceptable'
+                                : passPower === 5
+                                ? 'Contraseña robusta'
+                                : '¡Bien! Ni mr.robot puede con esa clave'
+                        }
+                    />
                 </div>
-            ) : (
+            )}
+
+            {step !== 1 && role === 'medico' && (
                 <div className='grid gap-5 grid-cols-1 md:grid-cols-2 mb-5'>
                     <Input
                         color='secondary'
@@ -125,17 +221,6 @@ export default function RegisterComponent() {
                         label='DNI/Documento'
                         {...register('dni')}
                     />
-                    {/* <Select
-                        color='secondary'
-                        errorMessage={errors.especialidad?.message}
-                        isInvalid={errors.especialidad?.message ? true : false}
-                        label='Especialidad'
-                        className='w-full'
-                        selectionMode='multiple'
-                        {...register('especialidad')}
-                    >
-                        {especialidadesOptions}
-                    </Select> */}
                     <Select
                         label='Seleccione especialidad'
                         color='secondary'
@@ -143,7 +228,8 @@ export default function RegisterComponent() {
                         isInvalid={errors.especialidad?.message ? true : false}
                         className='w-full'
                         selectionMode='multiple'
-                        {...register('especialidad')}
+                        multiple
+                        onSelectionChange={handleSelectEspecialidad}
                     >
                         {especialidades.map((especialidad) => (
                             <SelectItem key={especialidad.id} value={especialidad.nombre}>
@@ -153,7 +239,9 @@ export default function RegisterComponent() {
                     </Select>
 
                     <Autocomplete
-                        onInputChange={handleSelectChange}
+                        onInputChange={handleProvinciaSelect}
+                        errorMessage={errors.provincia?.message}
+                        isInvalid={errors.provincia?.message ? true : false}
                         color='secondary'
                         label='Seleccione provincia'
                         className='w-full'
@@ -166,6 +254,9 @@ export default function RegisterComponent() {
                     </Autocomplete>
 
                     <Autocomplete
+                        onInputChange={handleCiudadSelect}
+                        errorMessage={errors.ciudad?.message}
+                        isInvalid={errors.ciudad?.message ? true : false}
                         isDisabled={ciudades.length === 0}
                         label='Seleccione ciudad'
                         color='secondary'
