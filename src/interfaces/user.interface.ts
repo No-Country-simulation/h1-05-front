@@ -3,15 +3,13 @@ import { Especialidad } from './entidades.interface'
 export type Paciente = Usuario & {
     entidadId: number
     financiadorId: number
-    tratamientoId: number
-    personalMedicoId: number
-    patologiaId: number
+    tratamientoId?: number
+    personalMedicoId?: number
+    patologiaId?: string
     tipoDocumentoId: number
-    nombre: string
-    apellido: string
-    numeroDocumento: string
+    numeroDocumento: number
     fechaNacimiento: Date
-    sexo: string
+    sexo: 'F' | 'M'
     factorSanguineo: string
 }
 
@@ -29,6 +27,7 @@ export type Usuario = {
     lastname: string
     phoneNumber: number
     ciudad: string
+    provincia: string
     email: string
     role: 'medico' | 'paciente' | 'administrador'
 }
