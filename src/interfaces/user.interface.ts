@@ -32,3 +32,9 @@ export type Usuario = {
     email: string
     role: 'medico' | 'paciente' | 'administrador'
 }
+
+export interface ItemProfile {
+    icono: string
+    titulo: string
+    link: string
+}
