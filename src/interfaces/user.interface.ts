@@ -1,3 +1,4 @@
+import { IconType } from 'react-icons'
 import { Especialidad } from './entidades.interface'
 
 export type Paciente = Usuario & {
@@ -30,4 +31,10 @@ export type Usuario = {
     provincia: string
     email: string
     role: 'medico' | 'paciente' | 'administrador'
+}
+
+export interface ItemProfile {
+    Icono: IconType
+    titulo: string
+    link: string
 }

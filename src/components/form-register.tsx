@@ -16,12 +16,16 @@ import { useRouter } from 'next/navigation'
 
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+<<<<<<< HEAD
 import { registerSchema } from '@/validations/registerSchema'
 import { GrNext, GrPrevious } from 'react-icons/gr'
 import { FormEvent, useEffect, useState } from 'react'
 import { Ciudades, municipios_arg } from '@/constants/nomenclaturas/municipios_arg'
 import { especialidades } from '@/constants/nomenclaturas/especialidades'
 import { BiSolidLock, BiSolidLockOpen } from 'react-icons/bi'
+=======
+import { registerSchema, mappedEspecialidades } from '@/validations/registerSchema'
+>>>>>>> 09365375c201e444ed73a7606eed6c7223b22330
 
 type Inputs = {
     name: string
