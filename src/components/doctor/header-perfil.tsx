@@ -1,3 +1,4 @@
+'use client'
 import { Medico } from '@/interfaces/user.interface'
 import { Image } from '@nextui-org/react'
 import { useRouter } from 'next/navigation'

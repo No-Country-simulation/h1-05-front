@@ -1,3 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+    background-image: url('/img/background.png');
+    background-size: contain;
+    background-repeat: repeat;
+    min-height: 100vh;
+}

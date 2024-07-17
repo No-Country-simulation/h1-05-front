@@ -39,7 +39,7 @@ export default function Speech() {
                         }
                     }
 
-                    setTranscript((prevTranscript) => prevTranscript + finalTranscript + interimTranscript)
+                    setTranscript((prevTranscript) => prevTranscript + finalTranscript)
                 }
 
                 recognition.onerror = (event: any) => {
@@ -76,7 +76,9 @@ export default function Speech() {
         <div>
             <h1>Transcripción de texto</h1>
             <p>Escuchando: {isListening ? 'Sí' : 'No'}</p>
-            <button onClick={isListening ? stopListening : startListening}>{isListening ? 'Detener' : 'Iniciar'} reconocimiento</button>
+            <button onClick={isListening ? stopListening : startListening}>
+                {isListening ? 'Detener' : 'Iniciar'} reconocimiento
+            </button>
             <p>Texto: {transcript}</p>
         </div>
     )

@@ -1,4 +1,5 @@
 import { FaHouse, FaCalendarCheck, FaUserGroup, FaCircleUser } from 'react-icons/fa6'
+import { RiTestTubeFill } from 'react-icons/ri'
 
 export const menuDoctor = [
     {
@@ -20,5 +21,10 @@ export const menuDoctor = [
         name: 'Perfil',
         link: '/dashboard/perfil',
         Icon: FaCircleUser,
+    },
+    {
+        name: 'Test',
+        link: '/dashboard/test',
+        Icon: RiTestTubeFill,
     },
 ]
