@@ -25,13 +25,13 @@ export default function profile() {
                 titulo: 'Días de atención',
                 link: `${pathname}/dias-atencion`,
             },
-            { icono: '/img/perfil/edit-perfil/telefono.svg', titulo: 'Teléfono', link: `${pathname}/telefonox` },
+            { icono: '/img/perfil/edit-perfil/telefono.svg', titulo: 'Teléfono', link: `${pathname}/telefono` },
         ],
         datosSeguridad: [
             {
                 icono: '/img/perfil/edit-perfil/cambiar-contraseña.svg',
-                titulo: 'Contraseña',
-                link: `${pathname}/contraseña`,
+                titulo: 'Cambiar contraseña',
+                link: `${pathname}/cambiar-contrasena`,
             },
         ],
         coberturasMedicas: [
