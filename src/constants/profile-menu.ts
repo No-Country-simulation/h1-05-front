@@ -24,8 +24,8 @@ export const profileMenu = {
         },
         {
             Icono: MdOutlineLocalHospital,
-            titulo: 'Lugares de atención',
-            link: `edit-perfil/lugares-atencion`,
+            titulo: 'Lugares/horarios de atención',
+            link: `edit-perfil/lugar-horario-atencion`,
         },
         {
             Icono: MdOutlineCall,

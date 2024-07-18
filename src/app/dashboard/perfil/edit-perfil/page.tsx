@@ -3,6 +3,7 @@ import { useRouter } from 'next/navigation'
 import { IoIosArrowBack } from 'react-icons/io'
 import ItemPerfil from '@/components/item-perfil'
 import { profileMenu } from '@/constants/profile-menu'
+import CerrarSesion from '@/components/cerrar-sesion'
 
 export default function profile() {
     const route = useRouter()
@@ -36,6 +37,7 @@ export default function profile() {
                 {profileMenu.sesion.map((item, index) => (
                     <ItemPerfil itemProfile={item} key={index} />
                 ))}
+                <CerrarSesion />
             </div>
         </div>
     )

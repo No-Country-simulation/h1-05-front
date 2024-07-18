@@ -38,3 +38,7 @@ export interface ItemProfile {
     titulo: string
     link: string
 }
+
+export interface HoraAtencion {
+    hora: string
+}

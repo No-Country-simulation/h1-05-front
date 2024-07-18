@@ -16,7 +16,7 @@ export default function itemPerfil({ itemProfile }: { itemProfile: ItemProfile }
                 <Icono className='text-xl text-white' />
             </div>
             <h3 className='flex-grow'>{itemProfile.titulo}</h3>
-            <MdOutlineKeyboardArrowRight className='mr-2 text-xl' />
+            <MdOutlineKeyboardArrowRight className='mr-2 text-xl hover:cursor-pointer' />
         </div>
     )
 }

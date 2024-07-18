@@ -9,7 +9,10 @@ export default function HeaderDoctor({ medico }: { medico: Medico }) {
     const route = useRouter()
     return (
         <div className='bg-[url("/img/perfil/background-header.jpeg")] bg-cover p-4'>
-            <div className='flex flex-row-reverse mb-4' onClick={() => route.push('/dashboard/perfil/edit-perfil')}>
+            <div
+                className='flex flex-row-reverse mb-4 hover:cursor-pointer'
+                onClick={() => route.push('/dashboard/perfil/edit-perfil')}
+            >
                 <div className='w-11 h-11 bg-secondary flex justify-center items-center rounded-xl'>
                     <IoMdSettings color='white' className='w-5 h-5' />
                 </div>

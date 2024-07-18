@@ -7,7 +7,7 @@ import { IoIosArrowBack } from 'react-icons/io'
 
 export default function itemPerfil() {
     const route = useRouter()
-    const [selectedValue, setSelectedValue] = useState('option1')
+    const [selectedValue, setSelectedValue] = useState('')
 
     const handleChange = (value: string) => {
         setSelectedValue(value)
