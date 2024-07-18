@@ -2,7 +2,7 @@
 import { useRouter } from 'next/navigation'
 import { IoIosArrowBack } from 'react-icons/io'
 import ItemPerfil from '@/components/item-perfil'
-import { profileMenu } from '@/constants/profile-menu'
+import { profileMenu } from '@/constants/menus/doctor/profile-menu'
 
 export default function profile() {
     const route = useRouter()

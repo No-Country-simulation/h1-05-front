@@ -22,9 +22,9 @@ export const menuDoctor = [
         link: '/dashboard/perfil',
         Icon: FaCircleUser,
     },
-    {
-        name: 'Test',
-        link: '/dashboard/test',
-        Icon: RiTestTubeFill,
-    },
+    // {
+    //     name: 'Test',
+    //     link: '/dashboard/test',
+    //     Icon: RiTestTubeFill,
+    // },
 ]
