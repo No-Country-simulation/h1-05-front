@@ -8,9 +8,11 @@ import { eventos } from '@/constants/demo-events'
 
 export default function DashboardUser() {
     return (
-        <div className='max-w-7xl mx-auto'>
+        <>
             <HeaderDoctor medico={medico} />
-            <CalendarActivities eventos={eventos} />
-        </div>
+            <div className='max-w-7xl mx-auto'>
+                <CalendarActivities eventos={eventos} />
+            </div>
+        </>
     )
 }

@@ -1,5 +1,6 @@
 'use client'
-import { menuDoctor } from '@/constants/doctor-menu'
+
+import { menuDoctor } from '@/constants/menus/doctor/doctor-menu'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
