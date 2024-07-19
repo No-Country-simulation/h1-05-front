@@ -15,6 +15,7 @@ import { PiEyeClosed } from 'react-icons/pi'
 import { useState } from 'react'
 import { Medico } from '@/interfaces/user.interface'
 import { medico } from '@/constants/demo-medico'
+import { toast } from 'sonner'
 
 type Inputs = {
     email: string
@@ -38,8 +39,12 @@ export default function LoginForm() {
     const submitData = (data: Inputs) => {
         // info del user viene de la db
         // hacer fetch
-        console.log('todos los campos son validos')
         setUser(medico)
+        toast.success('Ingreso correcto...', {
+            className: 'bg-green-600 text-white',
+            position: 'top-center',
+            duration: 1000,
+        })
         route.push('/dashboard')
     }
 

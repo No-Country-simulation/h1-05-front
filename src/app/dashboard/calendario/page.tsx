@@ -22,10 +22,16 @@ export default function CalendarPage() {
                 <h3 className='text-xl text-purple-900'>
                     {diaNombre} {diaNumero}
                 </h3>
-                <HoraCalendario hora='12pm' type='CITA' />
-                <HoraCalendario hora='1pm' type='REUNION' />
-                <HoraCalendario hora='3pm' type='CONFERENCIA' />
-                <HoraCalendario hora='5pm' type='OTRO' />
+                <HoraCalendario
+                    evento={{
+                        description: 'Junta del colegio médico',
+                        id: 321231,
+                        place: 'Chile',
+                        type: 'REUNION',
+                        startDatetime: new Date(),
+                        endDateTime: new Date(),
+                    }}
+                />
             </div>
         </div>
     )

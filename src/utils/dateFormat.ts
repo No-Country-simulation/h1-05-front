@@ -5,7 +5,7 @@ export const dateFormat = (date?: Date) => {
     const opcionesHora: Intl.DateTimeFormatOptions = {
         hour: '2-digit',
         minute: '2-digit',
-        hour12: true,
+        hour12: false,
     }
 
     const hora = fecha.toLocaleTimeString('es-ES', opcionesHora)
@@ -16,7 +16,20 @@ export const dateFormat = (date?: Date) => {
     const dia = fecha.getDate()
 
     // Obtener el nombre del mes
-    const meses = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre']
+    const meses = [
+        'enero',
+        'febrero',
+        'marzo',
+        'abril',
+        'mayo',
+        'junio',
+        'julio',
+        'agosto',
+        'septiembre',
+        'octubre',
+        'noviembre',
+        'diciembre',
+    ]
     const nombreMes = meses[fecha.getMonth()]
 
     return {
