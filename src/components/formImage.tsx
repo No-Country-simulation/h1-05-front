@@ -1,5 +1,5 @@
 'use client'
-import { ChangeEvent, FormEvent, useState } from 'react'
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 import { Button, Image } from '@nextui-org/react'
 import { toast } from 'sonner'
 const urlFront = process.env.NEXT_PUBLIC_URL_FRONT as string
@@ -41,27 +41,52 @@ export default function FormImage() {
             setPending(true)
         }
     }
+
+    useEffect(() => {
+        const testFetchBack = async () => {
+            const urlBack = process.env.NEXT_PUBLIC_URL_BACK
+            console.log('probando conexión con backend')
+            const res = await fetch(`${urlBack}/auth/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: 'medic@test.justina.io',
+                    password: 'password123',
+                }),
+            })
+            console.log({ status_res: res.status })
+            if (res.ok) {
+                const data = await res.json()
+                console.log({ data })
+            } else {
+                console.log('hubo un error al conectar front con back :(', { res })
+            }
+        }
+        testFetchBack()
+    }, [])
     return (
         <>
             {!urlImage ? (
-                <form
-                    onSubmit={handleSubmit}
-                    className='flex flex-row gap-2 items-center justify-center p-4 bg-gray-100 rounded-lg shadow-md'
-                >
+                <form onSubmit={handleSubmit} className='flex flex-row gap-2 items-center justify-center p-4'>
                     <div className='relative'>
                         <input
                             name='file'
                             type='file'
-                            className='absolute inset-0 opacity-0 cursor-pointer z-50'
+                            className='absolute inset-0 opacity-0 z-50 cursor-pointer'
                             onChange={setImage}
+                            title='Presiona para cargar imagen'
                         />
-                        <Button color='warning' isDisabled={!pending} className='z-10 active:scale-90 transition-all'>
-                            Seleccionar foto de perfil
-                        </Button>
+                        <Image
+                            alt='Subir imagen perfil'
+                            src='/img/perfil/user.png'
+                            className='z-10 w-32 h-32 cursor-pointer'
+                        />
                     </div>
-                    <Button color='secondary' type='submit' isDisabled={pending} isLoading={isLoading}>
+                    {/* <Button color='secondary' type='submit' isDisabled={pending} isLoading={isLoading}>
                         {isLoading ? 'Cargando...' : 'Subir imagen'}
-                    </Button>
+                    </Button> */}
                 </form>
             ) : (
                 <div className='flex justify-center'>
