@@ -20,6 +20,7 @@ import { useEffect, useState } from 'react'
 import { Ciudades, municipios_arg } from '@/constants/nomenclaturas/municipios_arg'
 import { especialidades } from '@/constants/nomenclaturas/especialidades'
 import { BiSolidLock, BiSolidLockOpen } from 'react-icons/bi'
+import FormImage from './formImage'
 
 type Inputs = {
     name: string
@@ -111,18 +112,21 @@ export default function RegisterComponent() {
     return (
         <form onSubmit={handleSubmit(handleFormSend)}>
             {step === 1 && (
-                <RadioGroup
-                    orientation='horizontal'
-                    onValueChange={(value) => setRole(value)}
-                    label='Selecciona tipo de cuenta:'
-                    className='mb-4'
-                    color='secondary'
-                    defaultValue={role}
-                >
-                    <Radio value='medico'>Médico</Radio>
-                    <Radio value='paciente'>Paciente</Radio>
-                    <Radio value='clinica'>Clínica/Hospital</Radio>
-                </RadioGroup>
+                <>
+                    <RadioGroup
+                        orientation='horizontal'
+                        onValueChange={(value) => setRole(value)}
+                        label='Selecciona tipo de cuenta:'
+                        className='mb-4'
+                        color='secondary'
+                        defaultValue={role}
+                    >
+                        <Radio value='medico'>Médico</Radio>
+                        <Radio value='paciente'>Paciente</Radio>
+                        <Radio value='clinica'>Clínica/Hospital</Radio>
+                    </RadioGroup>
+                    <FormImage />
+                </>
             )}
             {step === 1 && (
                 <div className='grid gap-5 grid-cols-1 mb-5'>

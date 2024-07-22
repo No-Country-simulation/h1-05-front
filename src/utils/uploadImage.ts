@@ -11,7 +11,6 @@ export const uploadImage = async (data: FormData) => {
         cloud_name: CDN_NAME,
         secure: true,
     })
-    console.log({ data })
     if (!data || !data.get) {
         return { message: 'Debe cargar una imagen desde su dispositivo' } as ErrorUpload
     }
@@ -25,7 +24,7 @@ export const uploadImage = async (data: FormData) => {
                 .upload_stream(
                     {
                         folder: 'justina/uploads',
-                        eager: [{ format: 'webp', width: 500, height: 500, crop: 'scale' }],
+                        eager: [{ format: 'webp', width: 500, height: 500, crop: 'fit' }],
                     },
                     function (error, result) {
                         if (error) {

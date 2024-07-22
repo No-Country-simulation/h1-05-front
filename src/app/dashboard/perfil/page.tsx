@@ -6,7 +6,7 @@ import { profileMenu } from '@/constants/menus/doctor/profile-menu'
 import ItemPerfil from '@/components/item-perfil'
 import CerrarSesion from '@/components/cerrar-sesion'
 // import CerrarSesion from '@/components/cerrar-sesion'
-export default async function PerfilPage() {
+export default function PerfilPage() {
     return (
         <div className='min-h-screen'>
             <HeaderPerfilDoctor medico={medico} />
