@@ -30,7 +30,7 @@ export type Usuario = {
     ciudad: string
     provincia: string
     email: string
-    role: 'medico' | 'paciente' | 'administrador'
+    role: 'MEDICO' | 'PACIENTE' | 'ADMINISTRADOR'
 }
 
 export interface ItemProfile {

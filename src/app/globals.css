@@ -8,3 +8,9 @@ body {
     background-repeat: repeat;
     min-height: 100vh;
 }
+
+.header-doctor {
+    background-image: url('/img/samples/header-dashboard-doctor.jpg');
+    background-size: cover;
+    background-position: center;
+}
