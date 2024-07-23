@@ -1,12 +1,10 @@
-'use client'
-
-import FormImage from '@/components/formImage'
+import SearchVideos from '@/components/search-tutovideos'
 
 export default function TestPage() {
     return (
-        <div className='min-h-screen -mt-16 flex flex-col gap-4 items-center justify-center'>
+        <div className='min-h-screen flex flex-col gap-4 items-center justify-start'>
             <p className='mb-4'>Pagina de pruebas</p>
-            <FormImage />
+            <SearchVideos />
         </div>
     )
 }
