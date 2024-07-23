@@ -12,7 +12,14 @@ export default function MenuDoctor() {
             {/* MENU MOVIL */}
             <div className='w-full bg-white py-4 fixed bottom-0 md:hidden h-fit z-20 flex flex-row justify-evenly shadow-purple-900 shadow-large'>
                 {menuDoctor.map(({ name, link, Icon }) => {
-                    const textColor = path.includes(link) ? 'text-purple-900' : 'text-gray-600'
+                    let isActive
+                    if (link === '/dashboard') {
+                        isActive = path === link
+                    } else {
+                        isActive = path.startsWith(link)
+                    }
+                    const textColor = isActive ? 'text-purple-900' : 'text-gray-600'
+
                     return (
                         <Link
                             key={name}
@@ -32,7 +39,14 @@ export default function MenuDoctor() {
                 </div>
                 <div className='py-4 flex flex-col gap-10 sm:ml-4 md:ml-7 lg:ml-10 w-fit'>
                     {menuDoctor.map(({ name, link, Icon }) => {
-                        const textColor = path.includes(link) ? 'text-purple-900' : 'text-gray-600'
+                        let isActive
+                        if (link === '/dashboard') {
+                            isActive = path === link
+                        } else {
+                            isActive = path.startsWith(link)
+                        }
+                        const textColor = isActive ? 'text-purple-900' : 'text-gray-600'
+
                         return (
                             <Link
                                 key={name}

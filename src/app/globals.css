@@ -10,7 +10,7 @@ body {
 }
 
 .header-doctor {
-    background-image: url('/img/samples/header-dashboard-doctor.jpg');
-    background-size: cover;
+    background-image: url('/img/bg-header-doctor.png');
+    background-size: auto;
     background-position: center;
 }
