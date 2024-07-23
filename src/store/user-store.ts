@@ -3,10 +3,10 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
 interface UserStore {
-    user: null | Medico | Paciente
+    user: null | Medico
     loadingStore: boolean
     setLoadingStore: (value: boolean) => void
-    setUser: (user: Medico | Paciente) => void
+    setUser: (user: Medico) => void
     cerrarSesion: () => void
 }
 

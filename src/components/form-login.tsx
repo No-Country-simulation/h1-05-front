@@ -71,7 +71,21 @@ export default function LoginForm() {
 
     const fetchLogin = async (email: string, password: string) => {
         const urlBack = process.env.NEXT_PUBLIC_URL_BACK
-        console.log('probando conexión con backend')
+        interface UserLogin {
+            accessToken: string
+            refreshToken: string
+            user: {
+                email: string
+                firstName: string
+                lastName: string
+                phone: string
+                province: string
+                city: string
+                nroDocumento: number
+                role: string
+                photo: string
+            }
+        }
 
         const controller = new AbortController()
         const timeoutId = setTimeout(() => controller.abort(), 5000)
@@ -93,9 +107,21 @@ export default function LoginForm() {
             clearTimeout(timeoutId)
             console.log({ status_res: res.status })
             if (res.ok) {
-                const data = await res.json()
+                const data: UserLogin = await res.json()
                 console.log({ infoToken: tokenData(data.accessToken) })
-                setUser(medico) // [Pendiente] Setear con data cuando se tengan todas las propiedades
+                setUser({
+                    id: 1,
+                    city: data.user.city,
+                    email: data.user.email,
+                    especialidad: '',
+                    firstName: data.user.firstName,
+                    lastname: data.user.lastName,
+                    photo: data.user.photo,
+                    nroDocumento: data.user.nroDocumento,
+                    phone: data.user.phone,
+                    province: data.user.province,
+                    role: 'MEDICO',
+                }) // [Pendiente] Setear con data cuando se tengan todas las propiedades
                 return data
             }
             return null
@@ -106,6 +132,7 @@ export default function LoginForm() {
             setLoading(false)
         }
     }
+
     return (
         <form className='flex flex-col gap-4' onSubmit={handleSubmit(submitData)}>
             <div className='flex flex-col gap-5'>
