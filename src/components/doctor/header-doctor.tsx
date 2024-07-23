@@ -1,8 +1,10 @@
 import { Medico } from '@/interfaces/user.interface'
+import { userStore } from '@/store/user-store'
 import { dateFormat } from '@/utils/dateFormat'
 import { Image } from '@nextui-org/react'
 
-export default function HeaderDoctor({ medico }: { medico: Medico }) {
+export default function HeaderDoctor() {
+    const { user } = userStore()
     const { diaNombre, diaNumero, mesNombre } = dateFormat()
     return (
         <div className='relative header-doctor flex flex-col items-start justify-between shadow-md mb-6 text-white'>
@@ -11,11 +13,11 @@ export default function HeaderDoctor({ medico }: { medico: Medico }) {
                 <div>
                     <h1 className='text-3xl font-bold'>
                         Buen día, <br />
-                        Dr. {medico.lastname}
+                        Dr. {user?.firstName} {user?.lastname}
                     </h1>
                     <p className='text-gray-200'>Hoy, {`${diaNombre} ${diaNumero} de ${mesNombre}`}</p>
                 </div>
-                <Image src={medico.img} alt='Doctor' className='object-cover w-28 relative z-10' />
+                <Image src={user?.photo} alt='Doctor' className='object-cover w-28 relative z-10' />
             </div>
             <div className='w-full md:w-fit md:bg-transparent p-4 z-20'>
                 <div className='flex gap-6 md:gap-2 justify-evenly'>
