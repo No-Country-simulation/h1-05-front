@@ -19,14 +19,8 @@ export default function RegistrarMedicacion() {
         setSliderValue(sliderValue + 20)
     }
     return (
-        <div className='min-h-screen max-w-md mx-auto p-4  space-y-4 pb-[90px]'>
-            <Slider
-                aria-label='Player progress'
-                color='secondary'
-                // hideThumb={true}
-                value={sliderValue}
-                className='max-w-md'
-            />
+        <div className='min-h-screen max-w-md mx-auto p-4 space-y-4 pb-[90px]'>
+            <Slider aria-label='Player progress' color='secondary' value={sliderValue} className='max-w-md' />
             {step === 1 && <Medicamento />}
             {step === 2 && <Notas setStep={setStep} />}
             {step === 3 && <Frecuencia setStep={setStep} />}

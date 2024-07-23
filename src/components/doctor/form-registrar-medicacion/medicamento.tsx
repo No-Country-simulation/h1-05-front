@@ -1,15 +1,45 @@
 'use client'
-import { Input, Select, SelectItem } from '@nextui-org/react'
+import { Autocomplete, AutocompleteItem, Input, Select, SelectItem } from '@nextui-org/react'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { Key, useMemo, useState } from 'react'
 import { IoIosArrowBack } from 'react-icons/io'
 import { IoSearch } from 'react-icons/io5'
-
+import { medicamentos } from '@/constants/nomenclaturas/medicamentos'
+import useDebounce from '@/hooks/useDebounce'
 // import CerrarSesion from '@/components/cerrar-sesion'
 export default function Medicacion() {
     const route = useRouter()
     const [value, setValue] = useState('')
+    const debouncedValue = useDebounce(value, 300)
 
+    const filteredMedicamentos = useMemo(() => {
+        const seen = new Set()
+        return medicamentos
+            .filter((medicina) => {
+                const esNombre = medicina.nombre_comercial.toLowerCase().includes(debouncedValue.toLowerCase())
+                if (esNombre && !seen.has(medicina.nombre_comercial.toLowerCase() + medicina.POTENCIA?.toLowerCase())) {
+                    seen.add(medicina.nombre_comercial.toLowerCase() + medicina.POTENCIA?.toLowerCase())
+                    return true
+                }
+                return false
+            })
+            .slice(0, 10)
+    }, [debouncedValue])
+
+    const handleAutocomplete = (input: Key | null) => {
+        console.log(input)
+        if (input) {
+            const findMedicina = medicamentos.find((medicina) => medicina.clave_csf === input)
+            console.log(findMedicina)
+        }
+    }
+
+    const handleInputChange = (value: string) => {
+        console.log(value)
+        if (value) {
+            setValue(value)
+        }
+    }
     return (
         <div className='space-y-4'>
             <div className='flex items-center justify-center'>
@@ -20,16 +50,21 @@ export default function Medicacion() {
                 <h1 className='font-bold  flex-auto text-center'>Medicamento</h1>
             </div>
             <p>Selecciona el medicamento a asignar.</p>
-            <Input
+
+            <Autocomplete
                 label='Buscar medicamento'
                 color='secondary'
                 className='w-full'
                 startContent={<IoSearch />}
-                // selectionMode='multiple'
-                // multiple
-                onValueChange={setValue}
-                // onValueChange={handleSearch}
-            ></Input>
+                onInputChange={handleInputChange}
+                onSelectionChange={handleAutocomplete}
+            >
+                {filteredMedicamentos.map((medicina) => (
+                    <AutocompleteItem key={medicina.clave_csf} value={medicina.nombre_comercial}>
+                        {`${medicina.nombre_comercial} ${medicina.POTENCIA ? medicina.POTENCIA : ''}`}
+                    </AutocompleteItem>
+                ))}
+            </Autocomplete>
         </div>
     )
 }
