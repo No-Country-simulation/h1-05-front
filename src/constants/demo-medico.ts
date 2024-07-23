@@ -13,7 +13,7 @@ export const medico: Medico = {
     lastname: 'Espinoza',
     name: 'Iñaki',
     phoneNumber: 529898989898,
-    role: 'medico',
+    role: 'MEDICO',
     tipoDocumentoId: 321321,
     img: '/img/samples/doctor.png',
     provincia: 'Buenos Aires',

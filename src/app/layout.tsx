@@ -20,7 +20,7 @@ export default function RootLayout({
             <body className={`${inter.className}`}>
                 <main>
                     <NextUIProvider>{children}</NextUIProvider>
-                    <Toaster />
+                    <Toaster position='bottom-center' />
                 </main>
             </body>
         </html>

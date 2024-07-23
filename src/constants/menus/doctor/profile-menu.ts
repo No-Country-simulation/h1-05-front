@@ -15,53 +15,53 @@ export const profileMenu = {
         {
             Icono: MdOutlineMedicalInformation,
             titulo: 'Perfil profesional',
-            link: `edit-perfil/perfil-profesional`,
+            link: `perfil/perfil-profesional`,
         },
         {
             Icono: RiMapPin2Line,
             titulo: 'Dirección',
-            link: `edit-perfil/direccion`,
+            link: `perfil/direccion`,
         },
         {
             Icono: MdOutlineLocalHospital,
             titulo: 'Lugares/horarios de atención',
-            link: `edit-perfil/lugar-horario-atencion`,
+            link: `perfil/lugar-horario-atencion`,
         },
         {
             Icono: MdOutlineCall,
             titulo: 'Teléfono',
-            link: `edit-perfil/telefono`,
+            link: `perfil/telefono`,
         },
     ],
     datosSeguridad: [
         {
             Icono: MdOutlineLock,
             titulo: 'Contraseña',
-            link: `edit-perfil/contrasena`,
+            link: `perfil/contrasena`,
         },
     ],
     coberturasMedicas: [
         {
             Icono: BsPostcardHeart,
             titulo: 'Prepagas',
-            link: `edit-perfil/prepagas`,
+            link: `perfil/prepagas`,
         },
         {
             Icono: MdGroups2,
             titulo: 'Obras sociales',
-            link: `edit-perfil/obras-sociales`,
+            link: `perfil/obras-sociales`,
         },
     ],
     sesion: [
         {
             Icono: BiSolidPlaneAlt,
             titulo: 'Licencia',
-            link: `edit-perfil/licencia`,
+            link: `perfil/licencia`,
         },
         {
             Icono: IoMdNotificationsOutline,
             titulo: 'Notificaciones',
-            link: `edit-perfil/notificacion`,
+            link: `perfil/notificacion`,
         },
     ],
 }

@@ -14,7 +14,7 @@ export default function PacienteCard({ paciente }: { paciente: Paciente }) {
     const findPrepaga = prepagas.find(({ id }) => id === paciente.financiadorId)
 
     return (
-        <div className='flex flex-col bg-slate-50 px-3 py-2 rounded-lg shadow-md border-2 border-purple-600/20 hover:scale-105 transition-all'>
+        <div className='flex flex-col bg-slate-50 px-3 py-2 rounded-lg shadow-md border-2 border-purple-600/20 hover:scale-105 sm:hover:scale-95 transition-all'>
             <div className='flex flex-row items-center justify-start gap-3 border-b-1 border-purple-600 py-2'>
                 <Image
                     src='/img/samples/doctor.png'

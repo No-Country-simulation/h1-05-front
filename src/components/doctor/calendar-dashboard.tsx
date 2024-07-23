@@ -3,7 +3,12 @@ import { Calendar, type CalendarDate } from '@nextui-org/react'
 import { parseDate } from '@internationalized/date'
 import { useState } from 'react'
 export default function CalendarDashboard() {
-    const [value, setValue] = useState(parseDate('2024-07-17'))
+    const formatDate = (date: Date) => {
+        // en-CA usa YYYY-MM-DD
+        return date.toLocaleDateString('en-CA')
+    }
+
+    const [value, setValue] = useState(parseDate(formatDate(new Date())))
 
     const handleChangeCalendar = (value: CalendarDate) => {
         setValue(value)
