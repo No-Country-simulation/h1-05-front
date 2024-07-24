@@ -5,6 +5,8 @@ export type Paciente = Usuario & {
     fechaNacimiento: Date
     sexo: 'F' | 'M'
     factorSanguineo: string
+    patologia: string
+    prepaga: string
 }
 
 export type Medico = Usuario & {
