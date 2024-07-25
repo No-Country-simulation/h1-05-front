@@ -1,11 +1,9 @@
 'use client'
 import { Textarea } from '@nextui-org/react'
-// import { useRouter } from 'next/navigation'
 import { IoIosArrowBack } from 'react-icons/io'
 
 // import CerrarSesion from '@/components/cerrar-sesion'
 export default function Notas({ setStep }: { setStep: Function }) {
-    // const route = useRouter()
     return (
         <div className='space-y-4'>
             <div className='flex items-center justify-center'>
@@ -13,7 +11,7 @@ export default function Notas({ setStep }: { setStep: Function }) {
                 <h1 className='font-bold  flex-auto text-center'>Notas</h1>
             </div>
             <p>Ejemplo: ¿Para qué el paciente realiza este tratamiento? Precauciones a tener en cuenta.</p>
-            <Textarea label='Notas' placeholder='Introdusca el texto' className='max-w-xs' />
+            <Textarea label='Notas' placeholder='Introdusca el texto' className='max-w-xm' color='secondary' />
         </div>
     )
 }
