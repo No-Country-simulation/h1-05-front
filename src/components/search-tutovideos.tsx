@@ -60,7 +60,7 @@ export default function SearchVideos() {
                     ))}
                 </Select>
             </form>
-            <div className='w-full min-h-screen space-y-4 text-center flex flex-col items-center'>
+            <div className='w-full space-y-4 text-center flex flex-col items-center'>
                 {videos.map((v) => (
                     <iframe
                         src={v}
