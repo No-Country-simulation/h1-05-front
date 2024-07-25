@@ -92,7 +92,7 @@ export default function RegisterComponent() {
             const dataRes = await res.json()
             console.log({ dataRes })
             if (res.ok) {
-                route.push('success')
+                route.push('/register/success')
             } else {
                 toast.error('No se pudo realizar el registro, intente más tarde.')
             }

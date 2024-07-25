@@ -13,7 +13,6 @@ import { loginSchema } from '@/validations/loginSchema'
 import { ImEye } from 'react-icons/im'
 import { PiEyeClosed } from 'react-icons/pi'
 import { useState } from 'react'
-import { medico } from '@/constants/demo-medico'
 import { toast } from 'sonner'
 import { tokenData } from '@/utils/jwt-decode'
 
@@ -24,7 +23,7 @@ type Inputs = {
 
 export default function LoginForm() {
     // PENDING: handleSubmit, useStates
-    const { setUser } = userStore()
+    const { setUser, setToken } = userStore()
     const [isLoading, setLoading] = useState(false)
     const {
         register,
@@ -39,19 +38,6 @@ export default function LoginForm() {
 
     const submitData = async (data: Inputs) => {
         // info del user viene de la db
-        interface LoginResponse {
-            accessToken: 'eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjp7ImF1dGhvcml0eSI6Ik1FRElDTyJ9LCJ0eXBlIjoiYWNjZXNzIiwic3ViIjoibWVkaWNAdGVzdC5qdXN0aW5hLmlvIiwiaWF0IjoxNzIxNTI1MzQ2LCJleHAiOjE3MjE1Mjg5NDZ9.05hPHYrx5_-_VM4J8L_Go-pZhjYpUTSkH7sbSBnOuKgDKE506Fm_Ybuth6cm7h_SJhDJ9N3gn4O897m1tk7-PQ'
-            refreshToken: 'eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjp7ImF1dGhvcml0eSI6Ik1FRElDTyJ9LCJ0eXBlIjoicmVmcmVzaCIsInN1YiI6Im1lZGljQHRlc3QuanVzdGluYS5pbyIsImlhdCI6MTcyMTUyNTM0NiwiZXhwIjoxNzIxNTI4OTQ2fQ.iqqgvO7k8PbMVSJyhoZp3n4hEQtzEzIdJr_R1he2jo6wUuRvWnnEIkNs5PLu3MTsguOOgjIpLEndGXsozYvMiw'
-            user: {
-                email: 'medic@test.justina.io'
-                firstName: null
-                lastName: null
-                phone: null
-                location: null
-                role: 'MEDICO'
-            }
-        }
-
         const loginResponse = await fetchLogin(data.email, data.password)
         console.log(loginResponse)
         if (!loginResponse) {
@@ -121,7 +107,8 @@ export default function LoginForm() {
                     phone: data.user.phone,
                     province: data.user.province,
                     role: 'MEDICO',
-                }) // [Pendiente] Setear con data cuando se tengan todas las propiedades
+                })
+                setToken(data.accessToken)
                 return data
             }
             return null
