@@ -2,6 +2,7 @@
 import { Button, Input, Modal, ModalBody, ModalContent, ModalFooter, useDisclosure } from '@nextui-org/react'
 import { useState } from 'react'
 import ConfirmPasswordChange from './confirmation-password'
+import { toast } from 'sonner'
 
 const validateEmail = (email: string) => {
     const re =
@@ -14,16 +15,27 @@ export default function ResetPassword() {
     const [email, setEmail] = useState('')
     const [reseted, setReseted] = useState(false)
     const [errorMessage, setErrorMessage] = useState('')
+    const [loading, setLoading] = useState(false)
+    const handleReset = async () => {
+        try {
+            setLoading(true)
+            const isValid = validateEmail(email)
+            const message = 'Por favor ingrese un email válido'
+            isValid ? setErrorMessage('') : setErrorMessage(message)
 
-    const handleReset = () => {
-        const isValid = validateEmail(email)
-        const message = 'Por favor ingrese un email válido'
-        isValid ? setErrorMessage('') : setErrorMessage(message)
-
-        if (isValid) {
-            setReseted(true)
-            console.log('Reset password for:', email)
-            // Simulate password reset logic here (e.g., send reset email)
+            if (isValid) {
+                const res = await fetch(`${process.env.NEXT_PUBLIC_URL_BACK}/auth/reset-password?email=${email}`)
+                // Simulate password reset logic here (e.g., send reset email)
+                if (res.ok) {
+                    setReseted(true)
+                } else {
+                    toast.error('Ocurrió un error al solicitar una nueva contraseña')
+                }
+            }
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setLoading(false)
         }
     }
 
@@ -52,7 +64,7 @@ export default function ResetPassword() {
                         <Button color='warning' onClick={onOpenChange}>
                             Cerrar
                         </Button>
-                        <Button color='secondary' isDisabled={reseted} onClick={handleReset}>
+                        <Button color='secondary' isDisabled={loading} isLoading={loading} onClick={handleReset}>
                             Recuperar contraseña
                         </Button>
                     </ModalFooter>

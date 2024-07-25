@@ -2,19 +2,14 @@ import { Medico } from '@/interfaces/user.interface'
 
 export const medico: Medico = {
     id: 123123123,
-    ciudad: 'Buenos Aires',
-    descripcion: 'Comprensivo, muy empático',
+    city: 'Buenos Aires',
     email: 'doctor@correodemo.com',
-    especialidad: {
-        id: 1234132,
-        tipo: 'Transplantes',
-    },
-    especialidadId: 1234132,
+    especialidad: 'Transplantes',
     lastname: 'Espinoza',
-    name: 'Iñaki',
-    phoneNumber: 529898989898,
+    firstName: 'Iñaki',
+    phone: '529898989898',
     role: 'MEDICO',
-    tipoDocumentoId: 321321,
-    img: '/img/samples/doctor.png',
-    provincia: 'Buenos Aires',
+    nroDocumento: 321321,
+    photo: '/img/samples/doctor.png',
+    province: 'Buenos Aires',
 }

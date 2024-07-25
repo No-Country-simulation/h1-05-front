@@ -21,6 +21,8 @@ import { Ciudades, municipios_arg } from '@/constants/nomenclaturas/municipios_a
 import { especialidades } from '@/constants/nomenclaturas/especialidades'
 import { BiSolidLock, BiSolidLockOpen } from 'react-icons/bi'
 import FormImage from './formImage'
+import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
 
 type Inputs = {
     name: string
@@ -42,6 +44,9 @@ export default function RegisterComponent() {
     const [passPower, setPassPower] = useState(0)
     const [passColor, setPassColor] = useState<'danger' | 'warning' | 'success'>('danger')
     const [role, setRole] = useState('medico')
+    const [file, setFile] = useState<string | null>(null)
+    const [isLoading, setLoading] = useState(false)
+    const route = useRouter()
     const {
         register,
         handleSubmit,
@@ -55,8 +60,47 @@ export default function RegisterComponent() {
     })
 
     // PENDING: handleSubmit, useStates
-    const handleFormSend = (data: Inputs) => {
-        console.log(data)
+    const handleFormSend = async (data: Inputs) => {
+        setLoading(true)
+        console.log({ ...data, file })
+        const url = process.env.NEXT_PUBLIC_URL_BACK
+        let photo = file
+            ? file
+            : 'https://img.freepik.com/premium-vector/doctor-profile-with-medical-service-icon_617655-48.jpg'
+        try {
+            const res = await fetch(`${url}/auth/register`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    accept: '*/*',
+                },
+                body: JSON.stringify({
+                    email: data.email,
+                    password: data.password,
+                    firstName: data.name,
+                    lastName: data.lastname,
+                    phone: data.phoneNumber,
+                    province: data.provincia,
+                    city: data.ciudad,
+                    license: data.medicalLicense,
+                    nroDocumento: Number(data.dni),
+                    speciality: data.especialidad[0],
+                    photo: photo,
+                }),
+            })
+
+            const dataRes = await res.json()
+            console.log({ dataRes })
+            if (res.ok) {
+                route.push('/register/success')
+            } else {
+                toast.error('No se pudo realizar el registro, intente más tarde.')
+            }
+        } catch (error) {
+            console.error(error)
+        } finally {
+            setLoading(false)
+        }
     }
 
     const [ciudades, setCiudades] = useState<Ciudades[]>([])
@@ -107,13 +151,13 @@ export default function RegisterComponent() {
         if (score <= 2) setPassColor('danger')
         else if (score <= 4) setPassColor('warning')
         else setPassColor('success')
-    }, [watch('password')])
+    }, [watch('password'), watch('confirmPassword')])
 
     return (
         <form onSubmit={handleSubmit(handleFormSend)}>
             {step === 1 && (
                 <>
-                    <RadioGroup
+                    {/* <RadioGroup
                         orientation='horizontal'
                         onValueChange={(value) => setRole(value)}
                         label='Selecciona tipo de cuenta:'
@@ -124,8 +168,8 @@ export default function RegisterComponent() {
                         <Radio value='medico'>Médico</Radio>
                         <Radio value='paciente'>Paciente</Radio>
                         <Radio value='clinica'>Clínica/Hospital</Radio>
-                    </RadioGroup>
-                    <FormImage />
+                    </RadioGroup> */}
+                    <FormImage setFile={setFile} />
                 </>
             )}
             {step === 1 && (
@@ -284,7 +328,14 @@ export default function RegisterComponent() {
                 )}
             </Button>
             {step === 2 && (
-                <Button color='warning' className='w-full' variant='shadow' type='submit'>
+                <Button
+                    color='warning'
+                    className='w-full'
+                    variant='shadow'
+                    type='submit'
+                    disabled={isLoading}
+                    isLoading={isLoading}
+                >
                     Crear cuenta
                 </Button>
             )}

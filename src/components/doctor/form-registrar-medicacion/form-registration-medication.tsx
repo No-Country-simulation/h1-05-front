@@ -4,7 +4,8 @@ import Medicamento from '@/components/doctor/form-registrar-medicacion/medicamen
 import Notas from '@/components/doctor/form-registrar-medicacion/notas'
 import Frecuencia from '@/components/doctor/form-registrar-medicacion/frecuencia'
 import Dosis from '@/components/doctor/form-registrar-medicacion/dosis'
-import ExitoTratamiento from '@/components/doctor/form-registrar-medicacion/tratamiento-exito'
+import RegistroExitoso from '@/components/doctor/form-registrar-medicacion/registro-exitoso'
+import ResumenMedicacion from '@/components/doctor/form-registrar-medicacion/redumen-medicacion'
 
 import { useState } from 'react'
 
@@ -14,7 +15,6 @@ export default function RegistrarMedicacion() {
     const [sliderValue, setSliderValue] = useState(20)
     const handleSiguiente = () => {
         //si eh seleccionado puedo ir a siguiente
-        console.log(step)
         setStep(step + 1)
         setSliderValue(sliderValue + 20)
     }
@@ -25,17 +25,20 @@ export default function RegistrarMedicacion() {
             {step === 2 && <Notas setStep={setStep} />}
             {step === 3 && <Frecuencia setStep={setStep} />}
             {step === 4 && <Dosis setStep={setStep} />}
-            {step === 5 && <ExitoTratamiento setStep={setStep} setSliderValue={setSliderValue} />}
-            <div className='text-center'>
-                <Button
-                    color='secondary'
-                    type='button'
-                    className={step === 5 ? 'hidden' : 'w-full'}
-                    onClick={handleSiguiente}
-                >
-                    Siguiente
-                </Button>
-            </div>
+            {step === 5 && <RegistroExitoso setStep={setStep} setSliderValue={setSliderValue} />}
+            {step === 6 && <ResumenMedicacion setStep={setStep} />}
+            {step !== 6 && (
+                <div className='text-center'>
+                    <Button
+                        color='secondary'
+                        type='button'
+                        className={step === 5 ? 'hidden' : 'w-full'}
+                        onClick={handleSiguiente}
+                    >
+                        Siguiente
+                    </Button>
+                </div>
+            )}
         </div>
     )
 }

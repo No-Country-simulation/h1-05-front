@@ -1,5 +1,5 @@
 export const dateFormat = (date?: Date) => {
-    const fecha = date ? date : new Date()
+    const fecha = date ? new Date(date) : new Date()
     // Crear una nueva fecha
     // Obtener el nombre del día
     const opcionesHora: Intl.DateTimeFormatOptions = {

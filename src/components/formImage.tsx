@@ -1,11 +1,10 @@
 'use client'
-import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
+import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useState } from 'react'
 import { Button, Image, Skeleton } from '@nextui-org/react'
 import { toast } from 'sonner'
 const urlFront = process.env.NEXT_PUBLIC_URL_FRONT as string
-export default function FormImage() {
+export default function FormImage({ setFile }: { setFile: Dispatch<SetStateAction<string | null>> }) {
     const [isLoading, setLoading] = useState(false)
-    const [file, setFile] = useState<File | null>(null)
     const [urlImage, setUrl] = useState<string | null>(null)
 
     const setImage = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -14,7 +13,6 @@ export default function FormImage() {
 
         if (e.target.files) {
             singleFile = e.target.files[0]
-            setFile(singleFile)
             try {
                 const form = new FormData()
                 form.append('file', singleFile as File)
@@ -24,6 +22,7 @@ export default function FormImage() {
                 })
                 const res = await sendForm.json()
                 if (res.data) {
+                    setFile(res.data)
                     setUrl(res.data)
                 }
                 toast(res.message, {
