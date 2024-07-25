@@ -10,8 +10,8 @@ import { calculateAge } from '@/utils/calculateAge'
 import { prepagas } from '@/constants/nomenclaturas/prepagas'
 export default function PacienteCard({ paciente }: { paciente: Paciente }) {
     if (!paciente) return null
-    const findPatologia = enfermedades.find(({ id }) => id === paciente.patologiaId)
-    const findPrepaga = prepagas.find(({ id }) => id === paciente.financiadorId)
+    const findPatologia = enfermedades.find(({ detalle }) => detalle === paciente.patologia)
+    const findPrepaga = prepagas.find(({ entidad }) => entidad === paciente.prepaga)
 
     return (
         <div className='flex flex-col bg-slate-50 px-3 py-2 rounded-lg shadow-md border-2 border-purple-600/20 hover:scale-105 sm:hover:scale-95 transition-all'>
@@ -23,13 +23,13 @@ export default function PacienteCard({ paciente }: { paciente: Paciente }) {
                 />
                 <div>
                     <p className='font-bold text-2xl'>
-                        {paciente.name} {paciente.lastname}
+                        {paciente.firstName} {paciente.lastname}
                     </p>
                     {findPatologia && <p className='italic'>Patología: {findPatologia.detalle}</p>}
                 </div>
             </div>
             <div className='flex flex-row items-center justify-between py-1'>
-                <p>DNI: {paciente.numeroDocumento}</p>
+                <p>DNI: {paciente.nroDocumento}</p>
                 <p>Edad: {calculateAge(paciente.fechaNacimiento)} años</p>
             </div>
             <div className='flex flex-row flex-wrap gap-1'>
@@ -39,12 +39,12 @@ export default function PacienteCard({ paciente }: { paciente: Paciente }) {
                 </div>
                 <div className='flex flex-row items-center gap-1 px-2 py-1 bg-violet-500/10 rounded-md'>
                     <RiMapPin2Fill className='text-sm text-green-700' />
-                    {paciente.ciudad !== paciente.provincia ? (
+                    {paciente.city !== paciente.province ? (
                         <p>
-                            {paciente.ciudad}, {paciente.provincia}
+                            {paciente.city}, {paciente.province}
                         </p>
                     ) : (
-                        <p>{paciente.ciudad}</p>
+                        <p>{paciente.city}</p>
                     )}
                 </div>
                 <div className='flex flex-row items-center gap-1 px-2 py-1 bg-violet-500/10 rounded-md'>

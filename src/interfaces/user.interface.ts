@@ -2,34 +2,27 @@ import { IconType } from 'react-icons'
 import { Especialidad } from './entidades.interface'
 
 export type Paciente = Usuario & {
-    entidadId: number
-    financiadorId: number
-    tratamientoId?: number
-    personalMedicoId?: number
-    patologiaId?: string
-    tipoDocumentoId: number
-    numeroDocumento: number
     fechaNacimiento: Date
     sexo: 'F' | 'M'
     factorSanguineo: string
+    patologia: string
+    prepaga: string
 }
 
 export type Medico = Usuario & {
-    especialidadId: number
-    tipoDocumentoId: number
-    descripcion: string
-    especialidad: Especialidad
+    especialidad: string
 }
 
 export type Usuario = {
     id: number
-    img: string
-    name: string
+    firstName: string
     lastname: string
-    phoneNumber: number
-    ciudad: string
-    provincia: string
+    phone: string
+    city: string
+    province: string
     email: string
+    nroDocumento: number
+    photo: string
     role: 'MEDICO' | 'PACIENTE' | 'ADMINISTRADOR'
 }
 

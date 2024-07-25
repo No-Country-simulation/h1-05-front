@@ -1,12 +1,36 @@
+'use client'
 import { dateFormat } from '@/utils/dateFormat'
 import { Image } from '@nextui-org/react'
 import { GrFormNext, GrFormPrevious } from 'react-icons/gr'
 import { RxCalendar } from 'react-icons/rx'
 import { Evento } from '@/interfaces/entidades.interface'
 import Activity from './single-activity'
+import { useEffect, useState } from 'react'
+import { userStore } from '@/store/user-store'
 
-export default function CalendarActivities({ eventos }: { eventos: Evento[] }) {
+export default function CalendarActivities() {
+    const [events, setEvents] = useState<Evento[]>([])
     const { diaNombre, diaNumero, mesNombre } = dateFormat()
+    const { user, token, loadingStore } = userStore()
+
+    useEffect(() => {
+        const getEvents = async (token: string) => {
+            const url = process.env.NEXT_PUBLIC_URL_BACK
+            const res = await fetch(`${url}/events`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+            if (res.ok) {
+                const data: Evento[] = await res.json()
+                console.log(data)
+                setEvents(data)
+            }
+        }
+        if (!loadingStore && token) {
+            getEvents(token)
+        }
+    }, [loadingStore])
     return (
         <div className='p-4'>
             <div className='flex justify-between items-center mb-6 p-4'>
@@ -37,7 +61,7 @@ export default function CalendarActivities({ eventos }: { eventos: Evento[] }) {
 
             <div>
                 <h3 className='text-lg font-semibold mb-4'>Actividades</h3>
-                {eventos.map((evento) => (
+                {events.map((evento) => (
                     <Activity key={evento.id} actividad={evento} />
                 ))}
             </div>

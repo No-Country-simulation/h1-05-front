@@ -13,7 +13,6 @@ import { loginSchema } from '@/validations/loginSchema'
 import { ImEye } from 'react-icons/im'
 import { PiEyeClosed } from 'react-icons/pi'
 import { useState } from 'react'
-import { medico } from '@/constants/demo-medico'
 import { toast } from 'sonner'
 import { tokenData } from '@/utils/jwt-decode'
 
@@ -24,7 +23,7 @@ type Inputs = {
 
 export default function LoginForm() {
     // PENDING: handleSubmit, useStates
-    const { setUser } = userStore()
+    const { setUser, setToken } = userStore()
     const [isLoading, setLoading] = useState(false)
     const {
         register,
@@ -39,21 +38,7 @@ export default function LoginForm() {
 
     const submitData = async (data: Inputs) => {
         // info del user viene de la db
-        interface LoginResponse {
-            accessToken: 'eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjp7ImF1dGhvcml0eSI6Ik1FRElDTyJ9LCJ0eXBlIjoiYWNjZXNzIiwic3ViIjoibWVkaWNAdGVzdC5qdXN0aW5hLmlvIiwiaWF0IjoxNzIxNTI1MzQ2LCJleHAiOjE3MjE1Mjg5NDZ9.05hPHYrx5_-_VM4J8L_Go-pZhjYpUTSkH7sbSBnOuKgDKE506Fm_Ybuth6cm7h_SJhDJ9N3gn4O897m1tk7-PQ'
-            refreshToken: 'eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjp7ImF1dGhvcml0eSI6Ik1FRElDTyJ9LCJ0eXBlIjoicmVmcmVzaCIsInN1YiI6Im1lZGljQHRlc3QuanVzdGluYS5pbyIsImlhdCI6MTcyMTUyNTM0NiwiZXhwIjoxNzIxNTI4OTQ2fQ.iqqgvO7k8PbMVSJyhoZp3n4hEQtzEzIdJr_R1he2jo6wUuRvWnnEIkNs5PLu3MTsguOOgjIpLEndGXsozYvMiw'
-            user: {
-                email: 'medic@test.justina.io'
-                firstName: null
-                lastName: null
-                phone: null
-                location: null
-                role: 'MEDICO'
-            }
-        }
-
         const loginResponse = await fetchLogin(data.email, data.password)
-        console.log(loginResponse)
         if (!loginResponse) {
             return toast.error('Fallaron las credenciales de acceso', {
                 position: 'top-center',
@@ -71,7 +56,21 @@ export default function LoginForm() {
 
     const fetchLogin = async (email: string, password: string) => {
         const urlBack = process.env.NEXT_PUBLIC_URL_BACK
-        console.log('probando conexión con backend')
+        interface UserLogin {
+            accessToken: string
+            refreshToken: string
+            user: {
+                email: string
+                firstName: string
+                lastName: string
+                phone: string
+                province: string
+                city: string
+                nroDocumento: number
+                role: string
+                photo: string
+            }
+        }
 
         const controller = new AbortController()
         const timeoutId = setTimeout(() => controller.abort(), 5000)
@@ -93,9 +92,22 @@ export default function LoginForm() {
             clearTimeout(timeoutId)
             console.log({ status_res: res.status })
             if (res.ok) {
-                const data = await res.json()
+                const data: UserLogin = await res.json()
                 console.log({ infoToken: tokenData(data.accessToken) })
-                setUser(medico) // [Pendiente] Setear con data cuando se tengan todas las propiedades
+                setUser({
+                    id: 1,
+                    city: data.user.city,
+                    email: data.user.email,
+                    especialidad: '',
+                    firstName: data.user.firstName,
+                    lastname: data.user.lastName,
+                    photo: data.user.photo,
+                    nroDocumento: data.user.nroDocumento,
+                    phone: data.user.phone,
+                    province: data.user.province,
+                    role: 'MEDICO',
+                })
+                setToken(data.accessToken)
                 return data
             }
             return null
@@ -106,6 +118,7 @@ export default function LoginForm() {
             setLoading(false)
         }
     }
+
     return (
         <form className='flex flex-col gap-4' onSubmit={handleSubmit(submitData)}>
             <div className='flex flex-col gap-5'>
