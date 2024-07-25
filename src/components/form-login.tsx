@@ -39,7 +39,6 @@ export default function LoginForm() {
     const submitData = async (data: Inputs) => {
         // info del user viene de la db
         const loginResponse = await fetchLogin(data.email, data.password)
-        console.log(loginResponse)
         if (!loginResponse) {
             return toast.error('Fallaron las credenciales de acceso', {
                 position: 'top-center',
