@@ -157,7 +157,7 @@ export default function RegisterComponent() {
         <form onSubmit={handleSubmit(handleFormSend)}>
             {step === 1 && (
                 <>
-                    <RadioGroup
+                    {/* <RadioGroup
                         orientation='horizontal'
                         onValueChange={(value) => setRole(value)}
                         label='Selecciona tipo de cuenta:'
@@ -168,7 +168,7 @@ export default function RegisterComponent() {
                         <Radio value='medico'>Médico</Radio>
                         <Radio value='paciente'>Paciente</Radio>
                         <Radio value='clinica'>Clínica/Hospital</Radio>
-                    </RadioGroup>
+                    </RadioGroup> */}
                     <FormImage setFile={setFile} />
                 </>
             )}

@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 
 export default function HeaderDoctor() {
-    const { user, token, loadingStore } = userStore()
+    const { user, token, loadingStore, cerrarSesion } = userStore()
     const { diaNombre, diaNumero, mesNombre } = dateFormat()
     const route = useRouter()
 
@@ -18,6 +18,7 @@ export default function HeaderDoctor() {
             const currentDate = new Date()
 
             if (currentDate > expDate) {
+                cerrarSesion()
                 route.push('/login')
             } else {
                 console.log('La cuenta sigue activa.')
