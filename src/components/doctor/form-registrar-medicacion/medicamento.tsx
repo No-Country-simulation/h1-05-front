@@ -50,11 +50,10 @@ export default function Medicacion() {
                 <h1 className='font-bold  flex-auto text-center'>Medicamento</h1>
             </div>
             <p>Selecciona el medicamento a asignar.</p>
-
             <Autocomplete
                 label='Buscar medicamento'
+                className='max-w-xm w-full'
                 color='secondary'
-                className='w-full'
                 startContent={<IoSearch />}
                 onInputChange={handleInputChange}
                 onSelectionChange={handleAutocomplete}
