@@ -1,20 +1,19 @@
 'use client'
 
-import ResetPassword from '@/components/reset-pasword'
 import { Button, Image, Input, Link } from '@nextui-org/react'
 import { useSearchParams } from 'next/navigation'
-import { FormEvent, useState } from 'react'
+import { FormEvent, useState, Suspense } from 'react'
 import { ImEye } from 'react-icons/im'
 import { PiEyeClosed } from 'react-icons/pi'
 import { toast } from 'sonner'
 
-export default function ResetPasswordPage() {
+function ResetPasswordForm() {
     const params = useSearchParams()
     const [password, setPassword] = useState('')
     const [hasChanged, setChanged] = useState(false)
     const [showPass, setShowPass] = useState(false)
     const [loading, setLoading] = useState(false)
-    const token = params.size > 0 ? params.get('token') : ''
+    const token = params.get('token') || ''
 
     const sendForm = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -40,7 +39,7 @@ export default function ResetPasswordPage() {
         }
     }
 
-    if (params.size === 0) {
+    if (!token) {
         return (
             <div className='text-center pt-10'>
                 <h1 className='text-2xl font-semibold'>Debe ingresar desde el link enviado a su correo</h1>
@@ -88,5 +87,13 @@ export default function ResetPasswordPage() {
                 </Button>
             </Link>
         </div>
+    )
+}
+
+export default function ResetPasswordPage() {
+    return (
+        <Suspense fallback={<div>Cargando...</div>}>
+            <ResetPasswordForm />
+        </Suspense>
     )
 }
