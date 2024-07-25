@@ -10,7 +10,7 @@ export default function DashboardUser() {
         <>
             <HeaderDoctor />
             <div className='max-w-7xl mx-auto'>
-                <CalendarActivities eventos={eventos} />
+                <CalendarActivities />
             </div>
         </>
     )

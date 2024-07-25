@@ -1,11 +1,31 @@
-import { Medico } from '@/interfaces/user.interface'
+'use client'
 import { userStore } from '@/store/user-store'
 import { dateFormat } from '@/utils/dateFormat'
+import { tokenData } from '@/utils/jwt-decode'
 import { Image } from '@nextui-org/react'
+import { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
 
 export default function HeaderDoctor() {
-    const { user } = userStore()
+    const { user, token, loadingStore } = userStore()
     const { diaNombre, diaNumero, mesNombre } = dateFormat()
+    const route = useRouter()
+
+    useEffect(() => {
+        if (!loadingStore && token) {
+            const infoToken = tokenData(token)
+            const expDate = new Date(infoToken.exp * 1000)
+            const currentDate = new Date()
+
+            if (currentDate > expDate) {
+                route.push('/login')
+            } else {
+                console.log('La cuenta sigue activa.')
+            }
+        } else if (!loadingStore && !token) {
+            route.push('/login')
+        }
+    }, [loadingStore])
     return (
         <div className='relative header-doctor flex flex-col items-start justify-between shadow-md mb-6 text-white'>
             <div className='absolute inset-0 bg-purple-950/90 z-10'></div>
