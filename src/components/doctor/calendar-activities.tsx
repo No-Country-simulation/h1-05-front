@@ -1,36 +1,17 @@
 'use client'
 import { dateFormat } from '@/utils/dateFormat'
-import { Image } from '@nextui-org/react'
 import { GrFormNext, GrFormPrevious } from 'react-icons/gr'
-import { RxCalendar } from 'react-icons/rx'
 import { Evento } from '@/interfaces/entidades.interface'
 import Activity from './single-activity'
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import { userStore } from '@/store/user-store'
+import { Skeleton } from '@nextui-org/react'
+import { eventsUserStore } from '@/store/events-user'
 
 export default function CalendarActivities() {
-    const [events, setEvents] = useState<Evento[]>([])
+    const { events, isLoading } = eventsUserStore()
     const { diaNombre, diaNumero, mesNombre } = dateFormat()
-    const { user, token, loadingStore } = userStore()
 
-    useEffect(() => {
-        const getEvents = async (token: string) => {
-            const url = process.env.NEXT_PUBLIC_URL_BACK
-            const res = await fetch(`${url}/events`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            })
-            if (res.ok) {
-                const data: Evento[] = await res.json()
-                console.log(data)
-                setEvents(data)
-            }
-        }
-        if (!loadingStore && token) {
-            getEvents(token)
-        }
-    }, [loadingStore])
     return (
         <div className='p-4'>
             <div className='flex justify-between items-center mb-6 p-4'>
@@ -61,9 +42,40 @@ export default function CalendarActivities() {
 
             <div>
                 <h3 className='text-lg font-semibold mb-4'>Actividades</h3>
-                {events.map((evento) => (
-                    <Activity key={evento.id} actividad={evento} />
-                ))}
+                {isLoading ? (
+                    <Cargando />
+                ) : events.length === 0 ? (
+                    <p className='text-sm font-semibold'>
+                        No tienes eventos agendados, ve al calendario para crear el primero!
+                    </p>
+                ) : (
+                    events.map((evento) => <Activity key={evento.id} actividad={evento} />)
+                )}
+            </div>
+        </div>
+    )
+}
+
+function Cargando() {
+    return (
+        <div className='space-y-3'>
+            <div className='w-full flex items-center gap-3 rounded-md bg-slate-300 py-4 px-6'>
+                <div>
+                    <Skeleton className='flex rounded-full w-12 h-12' />
+                </div>
+                <div className='w-full flex flex-col gap-2'>
+                    <Skeleton className='h-3 w-3/5 rounded-lg' />
+                    <Skeleton className='h-3 w-4/5 rounded-lg' />
+                </div>
+            </div>
+            <div className='w-full flex items-center gap-3 rounded-md bg-slate-300 py-4 px-6 opacity-40'>
+                <div>
+                    <Skeleton className='flex rounded-full w-12 h-12' />
+                </div>
+                <div className='w-full flex flex-col gap-2'>
+                    <Skeleton className='h-3 w-3/5 rounded-lg' />
+                    <Skeleton className='h-3 w-4/5 rounded-lg' />
+                </div>
             </div>
         </div>
     )

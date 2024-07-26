@@ -2,11 +2,36 @@
 
 import { menuDoctor } from '@/constants/menus/doctor/doctor-menu'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import LogoVertical from '../logo-vertical'
+import { useEffect } from 'react'
+import { userStore } from '@/store/user-store'
+import { tokenData } from '@/utils/jwt-decode'
+import { eventsUserStore } from '@/store/events-user'
 
 export default function MenuDoctor() {
     const path = usePathname()
+    const route = useRouter()
+    const { token, loadingStore, cerrarSesion } = userStore()
+    const { getEvents } = eventsUserStore()
+
+    useEffect(() => {
+        if (!loadingStore && token) {
+            const infoToken = tokenData(token)
+            const expDate = new Date(infoToken.exp * 1000)
+            const currentDate = new Date()
+
+            if (currentDate > expDate) {
+                cerrarSesion()
+                route.push('/login')
+            } else {
+                getEvents(token)
+            }
+        } else if (!loadingStore && !token) {
+            route.push('/login')
+        }
+    }, [loadingStore])
+
     return (
         <>
             {/* MENU MOVIL */}

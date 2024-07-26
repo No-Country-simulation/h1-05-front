@@ -1,32 +1,13 @@
 'use client'
 import { userStore } from '@/store/user-store'
 import { dateFormat } from '@/utils/dateFormat'
-import { tokenData } from '@/utils/jwt-decode'
 import { Image } from '@nextui-org/react'
-import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
+import HeaderTotals from './header-totals'
 
 export default function HeaderDoctor() {
-    const { user, token, loadingStore, cerrarSesion } = userStore()
+    const { user } = userStore()
     const { diaNombre, diaNumero, mesNombre } = dateFormat()
-    const route = useRouter()
 
-    useEffect(() => {
-        if (!loadingStore && token) {
-            const infoToken = tokenData(token)
-            const expDate = new Date(infoToken.exp * 1000)
-            const currentDate = new Date()
-
-            if (currentDate > expDate) {
-                cerrarSesion()
-                route.push('/login')
-            } else {
-                console.log('La cuenta sigue activa.')
-            }
-        } else if (!loadingStore && !token) {
-            route.push('/login')
-        }
-    }, [loadingStore])
     return (
         <div className='relative header-doctor flex flex-col items-start justify-between shadow-md mb-6 text-white'>
             <div className='absolute inset-0 bg-purple-950/90 z-10'></div>
@@ -40,28 +21,7 @@ export default function HeaderDoctor() {
                 </div>
                 <Image src={user?.photo} alt='Doctor' className='object-cover w-28 relative z-10' />
             </div>
-            <div className='w-full md:w-fit md:bg-transparent p-4 z-20'>
-                <div className='flex gap-6 md:gap-2 justify-evenly'>
-                    <div className='text-center w-28 bg-yellow-400/80 rounded-small p-2 space-y-2'>
-                        <p className='text-2xl font-bold w-12 h-12 flex items-center justify-center mx-auto rounded-full bg-yellow-700'>
-                            8
-                        </p>
-                        <p className='text-xs font-extrabold uppercase text-yellow-900'>Pendientes</p>
-                    </div>
-                    <div className='text-center w-28 bg-emerald-200/80 rounded-small p-2 space-y-2'>
-                        <p className='text-2xl font-bold w-12 h-12 flex items-center justify-center mx-auto rounded-full bg-emerald-700'>
-                            4
-                        </p>
-                        <p className='text-xs font-extrabold uppercase text-emerald-900'>Atendidos</p>
-                    </div>
-                    <div className='text-center w-28 bg-fuchsia-200/80 rounded-small p-2 space-y-2'>
-                        <p className='text-2xl font-bold w-12 h-12 flex items-center justify-center mx-auto rounded-full bg-fuchsia-700'>
-                            12
-                        </p>
-                        <p className='text-xs font-extrabold uppercase text-fuchsia-900'>Total</p>
-                    </div>
-                </div>
-            </div>
+            <HeaderTotals />
         </div>
     )
 }

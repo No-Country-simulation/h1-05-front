@@ -25,7 +25,6 @@ export default function ResetPassword() {
 
             if (isValid) {
                 const res = await fetch(`${process.env.NEXT_PUBLIC_URL_BACK}/auth/reset-password?email=${email}`)
-                // Simulate password reset logic here (e.g., send reset email)
                 if (res.ok) {
                     setReseted(true)
                 } else {
