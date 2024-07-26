@@ -60,16 +60,19 @@ export default function SearchVideos() {
                     ))}
                 </Select>
             </form>
-            {videos.map((v) => (
-                <iframe
-                    src={v}
-                    width={500}
-                    height={280}
-                    allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
-                    allowFullScreen
-                    title='Ejemplo de videos en youtube'
-                />
-            ))}
+            <div className='w-full space-y-4 text-center flex flex-col items-center'>
+                {videos.map((v) => (
+                    <iframe
+                        src={v}
+                        // width={500}
+                        height={280}
+                        allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
+                        allowFullScreen
+                        title='Ejemplo de videos en youtube'
+                        className='px-4 w-full lg:w-1/2'
+                    />
+                ))}
+            </div>
         </>
     )
 }
