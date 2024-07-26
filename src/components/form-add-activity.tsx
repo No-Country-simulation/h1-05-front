@@ -32,23 +32,24 @@ export default function AddActividad({ fecha }: { fecha: string }) {
             2,
             '0'
         )}:00`
-        const startDatetime = new Date(startDateTimeString)
-        const endDatetime = new Date(endDateTimeString)
+        const startDatetime = new Date(startDateTimeString).toISOString()
+        const endDatetime = new Date(endDateTimeString).toISOString()
         try {
             if (!token) throw new Error('No hay token para crear evento')
-            const sendData = {
+            const dataToSendBackend = {
                 ...inputForms,
                 startDatetime,
                 endDatetime,
+                token,
             }
-            console.log(sendData)
+            console.log({ dataToSendBackend })
             const res = await fetch(`${process.env.NEXT_PUBLIC_URL_BACK}/events`, {
                 method: 'POST',
                 headers: {
                     Authorization: `Bearer ${token}`,
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ ...sendData }),
+                body: JSON.stringify({ ...dataToSendBackend }),
             })
             console.log(res)
             if (res.ok) {
@@ -68,19 +69,6 @@ export default function AddActividad({ fecha }: { fecha: string }) {
         setInputs({ ...inputForms, type })
     }
 
-    useEffect(() => {
-        const horaExtra = time.hour === 23 ? 0 : time.hour + 1
-        const startDateTimeString = `${dateCalendar}T${String(time.hour).padStart(2, '0')}:${String(
-            time.minute
-        ).padStart(2, '0')}:00`
-        const endDateTimeString = `${dateCalendar}T${String(horaExtra).padStart(2, '0')}:${String(time.minute).padStart(
-            2,
-            '0'
-        )}:00`
-        const startDatetime = new Date(startDateTimeString)
-        const endDatetime = new Date(endDateTimeString)
-        console.log({ inicio: startDatetime.toISOString(), fin: endDatetime.toISOString() })
-    }, [time])
     return (
         <form className='space-y-3' onSubmit={handleSubmit}>
             {/* <h3 className='text-xl font-semibold text-slate-700 -mb-3 pl-3'>Agregar actividad</h3> */}
