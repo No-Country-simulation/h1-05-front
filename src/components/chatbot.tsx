@@ -1,4 +1,5 @@
 'use client'
+import { userStore } from '@/store/user-store'
 import { Button, Input } from '@nextui-org/react'
 import { ChatCompletionMessageParam } from 'openai/resources/index.mjs'
 import { useState } from 'react'
@@ -6,6 +7,8 @@ import { useState } from 'react'
 export default function ChatBot() {
     const [messages, setMessages] = useState<ChatCompletionMessageParam[]>([])
     const [input, setInput] = useState('')
+    const [loading, setLoading] = useState(false)
+    const { user } = userStore()
 
     const sendMessages = async (chatMessages: ChatCompletionMessageParam[]) => {
         const res = await fetch(`${process.env.NEXT_PUBLIC_URL_FRONT}/api/ia`, {
@@ -22,6 +25,7 @@ export default function ChatBot() {
     }
 
     const handleSendMessage = async () => {
+        setLoading(true)
         if (input.trim()) {
             const userMessage: ChatCompletionMessageParam = { content: input, role: 'user' }
             setMessages((prevMessages) => [...prevMessages, userMessage])
@@ -37,16 +41,19 @@ export default function ChatBot() {
                 }
             } catch (error) {
                 console.error('Error fetching messages:', error)
+            } finally {
+                setLoading(false)
             }
         }
     }
 
     return (
         <div className='flex flex-col h-full max-w-md mx-auto bg-white shadow-lg rounded-lg overflow-hidden'>
-            <div className='flex-1 p-4 overflow-y-auto'>
-                <div className={`flex mb-4 justify-start`}>
-                    <div className={`p-3 rounded-lg max-w-xs break-words bg-yellow-100 text-gray-800`}>
-                        ¡Hola! soy tu asistente médico virtual. ¿En qué puedo ayudarte hoy?
+            <div className='flex-1 p-4 min-h-80 max-h-96 overflow-y-auto'>
+                <div className='flex mb-4 justify-start'>
+                    <div className='p-3 rounded-lg max-w-xs break-words bg-yellow-100 text-gray-800'>
+                        <p className='text-xs italic'>Chat IA</p>
+                        <p>¡Hola! soy tu asistente médico virtual. ¿En qué puedo ayudarte hoy?</p>
                     </div>
                 </div>
                 {messages.map((message) => (
@@ -59,13 +66,20 @@ export default function ChatBot() {
                                 message.role === 'user' ? 'bg-purple-500 text-white' : 'bg-yellow-100 text-gray-800'
                             }`}
                         >
-                            {message.content as string}
+                            {message.role === 'user' && user ? (
+                                <p className='text-xs italic text-right'>
+                                    {user.firstName} {user.lastname}
+                                </p>
+                            ) : (
+                                <p className='text-xs italic'>Chat IA</p>
+                            )}
+                            <p>{message.content as string}</p>
                         </div>
                     </div>
                 ))}
             </div>
             <div className='border-t border-gray-200 p-4'>
-                <div className='flex gap-2'>
+                <div className='flex flex-row justify-center gap-2'>
                     <Input
                         type='text'
                         radius='lg'
@@ -74,8 +88,14 @@ export default function ChatBot() {
                         onChange={(e) => setInput(e.target.value)}
                         onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
                     />
-                    <Button color='warning' onClick={handleSendMessage}>
-                        Enviar
+                    <Button
+                        color='warning'
+                        className='text-xs'
+                        onClick={handleSendMessage}
+                        isLoading={loading}
+                        isDisabled={loading}
+                    >
+                        {loading ? 'Esperando respuesta...' : 'Consultar a la IA'}
                     </Button>
                 </div>
             </div>

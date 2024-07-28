@@ -67,8 +67,12 @@ export default function LoginForm() {
                 province: string
                 city: string
                 nroDocumento: number
-                role: string
+                role: 'MEDICO' | 'PACIENTE' | 'ADMINISTRADOR'
                 photo: string
+                fechaNacimiento: string
+                sex: string
+                deseaDonar: boolean
+                donanteActivo: boolean
             }
         }
 
@@ -90,10 +94,9 @@ export default function LoginForm() {
             })
 
             clearTimeout(timeoutId)
-            console.log({ status_res: res.status })
             if (res.ok) {
                 const data: UserLogin = await res.json()
-                console.log({ infoToken: tokenData(data.accessToken) })
+                console.log({ infoToken: tokenData(data.accessToken), data })
                 setUser({
                     id: 1,
                     city: data.user.city,
@@ -105,7 +108,10 @@ export default function LoginForm() {
                     nroDocumento: data.user.nroDocumento,
                     phone: data.user.phone,
                     province: data.user.province,
-                    role: 'MEDICO',
+                    role: data.user.role,
+                    deseaDonar: data.user.deseaDonar,
+                    donanteActivo: data.user.donanteActivo,
+                    sex: data.user.sex,
                 })
                 setToken(data.accessToken)
                 return data

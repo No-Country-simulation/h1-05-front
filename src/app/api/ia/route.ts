@@ -4,7 +4,7 @@ import { ChatCompletionMessageParam } from 'openai/resources/index.mjs'
 
 export const POST = async (req: NextRequest) => {
     const { chat }: { chat: ChatCompletionMessageParam[] } = await req.json()
-    console.log(chat)
+
     try {
         const conversation = await ia.chat.completions.create({
             model: 'gpt-4o-mini',

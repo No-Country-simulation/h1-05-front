@@ -25,7 +25,11 @@ export default function MenuDoctor() {
                 cerrarSesion()
                 route.push('/login')
             } else {
-                getEvents(token)
+                if (infoToken.role !== 'MEDICO') {
+                    route.push('/')
+                } else {
+                    getEvents(token)
+                }
             }
         } else if (!loadingStore && !token) {
             route.push('/login')

@@ -23,6 +23,9 @@ export type Usuario = {
     email: string
     nroDocumento: number
     photo: string
+    sex: string
+    deseaDonar: boolean
+    donanteActivo: boolean
     role: 'MEDICO' | 'PACIENTE' | 'ADMINISTRADOR'
 }
 
