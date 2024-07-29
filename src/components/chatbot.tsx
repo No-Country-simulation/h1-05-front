@@ -1,15 +1,18 @@
 'use client'
+import useAudioSpeech from '@/hooks/useAudio'
 import { userStore } from '@/store/user-store'
 import { Button, Input } from '@nextui-org/react'
 import { ChatCompletionMessageParam } from 'openai/resources/index.mjs'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { FaMicrophone } from 'react-icons/fa6'
+import { RiUserVoiceFill } from 'react-icons/ri'
 
 export default function ChatBot() {
     const [messages, setMessages] = useState<ChatCompletionMessageParam[]>([])
     const [input, setInput] = useState('')
     const [loading, setLoading] = useState(false)
     const { user } = userStore()
-
+    const { isListening, startListening, stopListening, transcript } = useAudioSpeech()
     const sendMessages = async (chatMessages: ChatCompletionMessageParam[]) => {
         const res = await fetch(`${process.env.NEXT_PUBLIC_URL_FRONT}/api/ia`, {
             method: 'POST',
@@ -46,6 +49,10 @@ export default function ChatBot() {
             }
         }
     }
+
+    useEffect(() => {
+        setInput(transcript)
+    }, [transcript])
 
     return (
         <div className='flex flex-col h-full max-w-md mx-auto bg-white shadow-lg rounded-lg overflow-hidden'>
@@ -98,6 +105,23 @@ export default function ChatBot() {
                         {loading ? 'Esperando respuesta...' : 'Consultar a la IA'}
                     </Button>
                 </div>
+            </div>
+            <div className='px-4 mb-3'>
+                <Button
+                    color='default'
+                    className='text-xs'
+                    fullWidth
+                    onClick={isListening ? stopListening : startListening}
+                    startContent={
+                        isListening ? (
+                            <FaMicrophone className='animate-latido text-purple-900 text-xl' />
+                        ) : (
+                            <RiUserVoiceFill className='text-purple-600 text-xl' />
+                        )
+                    }
+                >
+                    {isListening ? '... Escuchando' : 'Enviar mensaje por voz'}
+                </Button>
             </div>
         </div>
     )

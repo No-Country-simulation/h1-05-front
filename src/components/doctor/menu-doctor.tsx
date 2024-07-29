@@ -8,12 +8,18 @@ import { useEffect } from 'react'
 import { userStore } from '@/store/user-store'
 import { tokenData } from '@/utils/jwt-decode'
 import { eventsUserStore } from '@/store/events-user'
+import useAudioSpeech from '@/hooks/useAudio'
+import { toast } from 'sonner'
+import { Button } from '@nextui-org/react'
+import { FaMicrophone } from 'react-icons/fa6'
+import { RiUserVoiceFill } from 'react-icons/ri'
 
 export default function MenuDoctor() {
     const path = usePathname()
     const route = useRouter()
     const { token, loadingStore, cerrarSesion } = userStore()
     const { getEvents } = eventsUserStore()
+    const { isListening, startListening, stopListening, transcript, setTranscript } = useAudioSpeech()
 
     useEffect(() => {
         if (!loadingStore && token) {
@@ -36,6 +42,48 @@ export default function MenuDoctor() {
         }
     }, [loadingStore])
 
+    function containsKeyword(transcript: string, keywords: string[]) {
+        const lowerCaseTranscript = transcript.toLowerCase()
+        for (const keyword of keywords) {
+            if (lowerCaseTranscript.includes(keyword)) {
+                return true
+            }
+        }
+        return false
+    }
+    useEffect(() => {
+        if (!isListening) startListening()
+    }, [])
+
+    useEffect(() => {
+        const dashArr = ['dashboard', 'home', 'inicio', 'principal']
+        const testArr = ['pruebas', 'test', 'demostraciones']
+        const calendarArr = ['calendario', 'eventos', 'agenda']
+        const pacientesArr = ['pacientes', 'clientes', 'usuarios']
+
+        if (containsKeyword(transcript, dashArr)) {
+            route.push('/dashboard')
+            toast('Cambiando al dashboard', { position: 'top-center' })
+            setTranscript('')
+        }
+        if (containsKeyword(transcript, testArr)) {
+            route.push('/dashboard/test')
+            toast('Cambiando a test', { position: 'top-center' })
+            setTranscript('')
+        }
+        if (containsKeyword(transcript, calendarArr)) {
+            route.push('/dashboard/calendario')
+            toast('Cambiando al calendario', { position: 'top-center' })
+            setTranscript('')
+        }
+        if (containsKeyword(transcript, pacientesArr)) {
+            route.push('/dashboard/pacientes')
+            toast('Cambiando a pacientes', { position: 'top-center' })
+            setTranscript('')
+        }
+
+        return () => stopListening()
+    }, [transcript])
     return (
         <>
             {/* MENU MOVIL */}
@@ -87,6 +135,14 @@ export default function MenuDoctor() {
                             </Link>
                         )
                     })}
+                    <Button
+                        color={isListening ? 'danger' : 'warning'}
+                        size='sm'
+                        variant='ghost'
+                        onClick={isListening ? stopListening : startListening}
+                    >
+                        {isListening ? 'Detener reconocimiento de voz' : 'Activar reconocimiento de voz'}
+                    </Button>
                 </div>
             </div>
         </>
