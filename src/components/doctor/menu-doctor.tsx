@@ -11,8 +11,6 @@ import { eventsUserStore } from '@/store/events-user'
 import useAudioSpeech from '@/hooks/useAudio'
 import { toast } from 'sonner'
 import { Button } from '@nextui-org/react'
-import { FaMicrophone } from 'react-icons/fa6'
-import { RiUserVoiceFill } from 'react-icons/ri'
 
 export default function MenuDoctor() {
     const path = usePathname()
@@ -29,6 +27,7 @@ export default function MenuDoctor() {
 
             if (currentDate > expDate) {
                 cerrarSesion()
+                toast.error('Su sesión ha expirado, ingrese nuevamente')
                 route.push('/login')
             } else {
                 if (infoToken.role !== 'MEDICO') {

@@ -12,7 +12,7 @@ export default function ChatBot() {
     const [input, setInput] = useState('')
     const [loading, setLoading] = useState(false)
     const { user } = userStore()
-    const { isListening, startListening, stopListening, transcript } = useAudioSpeech()
+    const { isListening, startListening, stopListening, transcript, setTranscript } = useAudioSpeech()
     const sendMessages = async (chatMessages: ChatCompletionMessageParam[]) => {
         const res = await fetch(`${process.env.NEXT_PUBLIC_URL_FRONT}/api/ia`, {
             method: 'POST',
@@ -33,7 +33,7 @@ export default function ChatBot() {
             const userMessage: ChatCompletionMessageParam = { content: input, role: 'user' }
             setMessages((prevMessages) => [...prevMessages, userMessage])
             setInput('')
-
+            setTranscript('')
             try {
                 const res = await sendMessages([...messages, userMessage])
                 if (res.ok) {
@@ -102,7 +102,7 @@ export default function ChatBot() {
                         isLoading={loading}
                         isDisabled={loading}
                     >
-                        {loading ? 'Esperando respuesta...' : 'Consultar a la IA'}
+                        {loading ? 'Espere...' : 'Consultar a la IA'}
                     </Button>
                 </div>
             </div>
