@@ -5,7 +5,6 @@ import { Image } from '@nextui-org/react'
 
 export default function DashboardPage() {
     const { user } = userStore()
-    console.log(user)
     return (
         <div className='pb-16 sm:pb-3'>
             <div className='relative header-doctor flex flex-col items-start justify-between shadow-md mb-6 text-white'>

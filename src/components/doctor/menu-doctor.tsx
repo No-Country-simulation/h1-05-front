@@ -11,6 +11,7 @@ import { eventsUserStore } from '@/store/events-user'
 import useAudioSpeech from '@/hooks/useAudio'
 import { toast } from 'sonner'
 import { Button } from '@nextui-org/react'
+import CerrarSesion from '../cerrar-sesion'
 
 export default function MenuDoctor() {
     const path = usePathname()
@@ -127,7 +128,7 @@ export default function MenuDoctor() {
                             <Link
                                 key={name}
                                 href={link}
-                                className={`flex flex-row sm:px-2 md:px-4 lg:px-6 rounded-md hover:text-purple-600 hover:bg-slate-500/10 hover:scale-110 gap-2 items-center transition-all ${textColor}`}
+                                className={`flex flex-row sm:px-2 md:px-4 lg:px-0 rounded-md hover:text-purple-600 hover:bg-slate-500/10 hover:scale-110 gap-2 items-center transition-all ${textColor}`}
                             >
                                 <Icon className='text-3xl' />
                                 <span className='text-sm'>{name}</span>
@@ -142,6 +143,7 @@ export default function MenuDoctor() {
                     >
                         {isListening ? 'Detener reconocimiento de voz' : 'Activar reconocimiento de voz'}
                     </Button>
+                    <CerrarSesion />
                 </div>
             </div>
         </>

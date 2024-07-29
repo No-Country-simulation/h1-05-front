@@ -46,12 +46,22 @@ export default function LoginForm() {
                 duration: 2000,
             })
         }
-        toast.success('Ingreso correcto...', {
-            className: 'bg-green-600 text-white',
-            position: 'top-center',
-            duration: 2000,
-        })
-        route.push('/dashboard')
+        if (loginResponse.user.role === 'MEDICO') {
+            toast.success('Ingreso correcto...', {
+                className: 'bg-green-600 text-white',
+                position: 'top-center',
+                duration: 2000,
+            })
+            route.push('/dashboard')
+        }
+        if (loginResponse.user.role === 'PACIENTE') {
+            toast.success('Ingreso correcto...', {
+                className: 'bg-green-600 text-white',
+                position: 'top-center',
+                duration: 2000,
+            })
+            route.push('/paciente')
+        }
     }
 
     const fetchLogin = async (email: string, password: string) => {

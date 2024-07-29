@@ -28,13 +28,13 @@ export default function ChatBot() {
     }
 
     const handleSendMessage = async () => {
-        setLoading(true)
-        if (input.trim()) {
-            const userMessage: ChatCompletionMessageParam = { content: input, role: 'user' }
-            setMessages((prevMessages) => [...prevMessages, userMessage])
-            setInput('')
-            setTranscript('')
-            try {
+        try {
+            setLoading(true)
+            if (input.trim()) {
+                const userMessage: ChatCompletionMessageParam = { content: input, role: 'user' }
+                setMessages((prevMessages) => [...prevMessages, userMessage])
+                setInput('')
+                setTranscript('')
                 const res = await sendMessages([...messages, userMessage])
                 if (res.ok) {
                     const messagesRes = await res.json()
@@ -42,11 +42,11 @@ export default function ChatBot() {
                 } else {
                     console.error('Failed to fetch messages:', res.statusText)
                 }
-            } catch (error) {
-                console.error('Error fetching messages:', error)
-            } finally {
-                setLoading(false)
             }
+        } catch (error) {
+            console.error('Error fetching messages:', error)
+        } finally {
+            setLoading(false)
         }
     }
 
@@ -100,7 +100,7 @@ export default function ChatBot() {
                         className='text-xs'
                         onClick={handleSendMessage}
                         isLoading={loading}
-                        isDisabled={loading}
+                        isDisabled={loading || !input}
                     >
                         {loading ? 'Espere...' : 'Consultar a la IA'}
                     </Button>
