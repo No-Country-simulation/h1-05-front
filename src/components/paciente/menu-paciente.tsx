@@ -1,6 +1,6 @@
 'use client'
 
-import { menuDoctor } from '@/constants/menus/doctor/doctor-menu'
+import { menuPaciente } from '@/constants/menus/paciente/paciente-menu'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import LogoVertical from '../logo-vertical'
@@ -13,7 +13,7 @@ import { toast } from 'sonner'
 import { Button } from '@nextui-org/react'
 import CerrarSesion from '../cerrar-sesion'
 
-export default function MenuDoctor() {
+export default function MenuPaciente() {
     const path = usePathname()
     const route = useRouter()
     const { token, loadingStore, cerrarSesion } = userStore()
@@ -88,7 +88,7 @@ export default function MenuDoctor() {
         <>
             {/* MENU MOVIL */}
             <div className='w-full bg-white py-4 fixed bottom-0 md:hidden h-fit z-20 flex flex-row justify-evenly shadow-purple-900 shadow-large'>
-                {menuDoctor.map(({ name, link, Icon }) => {
+                {menuPaciente.map(({ name, link, Icon }) => {
                     let isActive
                     if (link === '/dashboard') {
                         isActive = path === link
@@ -115,7 +115,7 @@ export default function MenuDoctor() {
                     <LogoVertical />
                 </div>
                 <div className='py-4 flex flex-col gap-10 sm:ml-4 md:ml-7 lg:ml-10 w-fit'>
-                    {menuDoctor.map(({ name, link, Icon }) => {
+                    {menuPaciente.map(({ name, link, Icon }) => {
                         let isActive
                         if (link === '/dashboard') {
                             isActive = path === link

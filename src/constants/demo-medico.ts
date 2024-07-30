@@ -12,4 +12,7 @@ export const medico: Medico = {
     nroDocumento: 321321,
     photo: '/img/samples/doctor.png',
     province: 'Buenos Aires',
+    deseaDonar: true,
+    donanteActivo: true,
+    sex: 'MASCULINO',
 }

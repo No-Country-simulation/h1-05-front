@@ -3,7 +3,7 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
 interface UserStore {
-    user: null | Medico
+    user: null | Medico | Paciente
     token: null | string
     loadingStore: boolean
     setLoadingStore: (value: boolean) => void

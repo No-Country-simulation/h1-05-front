@@ -10,7 +10,7 @@ export const eventos: Evento[] = [
         place: 'Clínica San Pedro',
         type: 'CITA',
         description: 'Reunion con familiares',
-        startDatetime: new Date('2024-07-11T08:00:00.000Z'),
-        endDateTime: new Date('2024-07-11T08:00:00.000Z'),
+        startDatetime: '2024-07-11T08:00:00.000Z',
+        endDateTime: '2024-07-11T08:00:00.000Z',
     },
 ]
