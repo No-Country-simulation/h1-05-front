@@ -3,6 +3,8 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import { NextUIProvider } from '@nextui-org/react'
 import { Toaster } from 'sonner'
+import Link from 'next/link'
+import Head from 'next/head'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
@@ -17,6 +19,9 @@ export default function RootLayout({
 }>) {
     return (
         <html lang='es'>
+            {/* <Head>
+                <Link href='https://cdn.userway.org/widget.js' data-account='Y4t2yj84V9' />
+            </Head> */}
             <body className={`${inter.className}`}>
                 <main>
                     <NextUIProvider>{children}</NextUIProvider>

@@ -2,8 +2,6 @@ import { IconType } from 'react-icons'
 import { Especialidad } from './entidades.interface'
 
 export type Paciente = Usuario & {
-    fechaNacimiento: Date
-    sexo: 'F' | 'M'
     factorSanguineo: string
     patologia: string
     prepaga: string
@@ -16,7 +14,7 @@ export type Medico = Usuario & {
 export type Usuario = {
     id: number
     firstName: string
-    lastname: string
+    lastName: string
     phone: string
     city: string
     province: string
@@ -27,6 +25,9 @@ export type Usuario = {
     deseaDonar: boolean
     donanteActivo: boolean
     role: 'MEDICO' | 'PACIENTE' | 'ADMINISTRADOR'
+    medicId: number | null
+    patientId: number | null
+    fechaNacimiento: string
 }
 
 export interface ItemProfile {

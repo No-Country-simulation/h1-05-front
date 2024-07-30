@@ -1,10 +1,12 @@
 'use client'
 
 import { userStore } from '@/store/user-store'
+import { dateFormat } from '@/utils/dateFormat'
 import { Image } from '@nextui-org/react'
 
 export default function DashboardPage() {
     const { user } = userStore()
+    const { diaNombre, mesNombre } = dateFormat()
     return (
         <div className='pb-16 sm:pb-3'>
             <div className='relative header-doctor flex flex-col items-start justify-between shadow-md mb-6 text-white'>
@@ -13,15 +15,17 @@ export default function DashboardPage() {
                     <div>
                         <h1 className='text-3xl font-bold'>
                             Buen día, <br />
-                            Dr. asdasdas
+                            {user?.firstName} {user?.lastName}
                         </h1>
-                        <p className='text-gray-200'>Hoy, asasdas</p>
+                        <p className='text-gray-200'>
+                            Hoy, {diaNombre} de {mesNombre}
+                        </p>
                     </div>
-                    <Image alt='Doctor' className='object-cover w-28 relative z-10' />
+                    <Image alt='Doctor' src={user?.photo} className='object-cover w-28 relative z-10' />
                 </div>
                 {/* <HeaderTotals /> */}
             </div>
-            <div className='max-w-7xl mx-auto'>Calendario</div>
+            <div className='max-w-7xl mx-auto'>Dashboard del paciente</div>
         </div>
     )
 }
