@@ -17,6 +17,9 @@ export const pacientes: Paciente[] = [
         prepaga: '110626',
         patologia: 'C62',
         phone: '351351531',
+        deseaDonar: true,
+        donanteActivo: true,
+        sex: 'MASCULINO',
     },
     {
         id: 8006,
@@ -34,6 +37,9 @@ export const pacientes: Paciente[] = [
         prepaga: '220733',
         patologia: 'E11',
         phone: '123456789',
+        deseaDonar: true,
+        donanteActivo: true,
+        sex: 'FEMENINO',
     },
     {
         id: 8007,
@@ -51,6 +57,9 @@ export const pacientes: Paciente[] = [
         prepaga: '330844',
         patologia: 'I10',
         phone: '987654321',
+        deseaDonar: true,
+        donanteActivo: true,
+        sex: 'MASCULINO',
     },
     {
         id: 8008,
@@ -68,6 +77,9 @@ export const pacientes: Paciente[] = [
         prepaga: '440955',
         patologia: 'J45',
         phone: '456789123',
+        deseaDonar: true,
+        donanteActivo: true,
+        sex: 'FEMENINO',
     },
     {
         id: 8009,
@@ -85,6 +97,9 @@ export const pacientes: Paciente[] = [
         prepaga: '550066',
         patologia: 'K35',
         phone: '321654987',
+        deseaDonar: true,
+        donanteActivo: true,
+        sex: 'MASCULINO',
     },
     {
         id: 8010,
@@ -102,6 +117,9 @@ export const pacientes: Paciente[] = [
         prepaga: '660177',
         patologia: 'N18',
         phone: '789123456',
+        deseaDonar: true,
+        donanteActivo: true,
+        sex: 'FEMENINO',
     },
     {
         id: 8011,
@@ -119,6 +137,9 @@ export const pacientes: Paciente[] = [
         prepaga: '770288',
         patologia: 'C34',
         phone: '654321987',
+        deseaDonar: true,
+        donanteActivo: true,
+        sex: 'MASCULINO',
     },
     {
         id: 8012,
@@ -136,6 +157,9 @@ export const pacientes: Paciente[] = [
         prepaga: '880399',
         patologia: 'E66',
         phone: '123789456',
+        deseaDonar: true,
+        donanteActivo: true,
+        sex: 'FEMENINO',
     },
     {
         id: 8013,
@@ -153,6 +177,9 @@ export const pacientes: Paciente[] = [
         prepaga: '990411',
         patologia: 'M54',
         phone: '987321654',
+        deseaDonar: true,
+        donanteActivo: true,
+        sex: 'MASCULINO',
     },
     {
         id: 8014,
@@ -170,6 +197,9 @@ export const pacientes: Paciente[] = [
         prepaga: '110522',
         patologia: 'I20',
         phone: '321987654',
+        deseaDonar: true,
+        donanteActivo: true,
+        sex: 'FEMENINO',
     },
     {
         id: 8015,
@@ -187,5 +217,8 @@ export const pacientes: Paciente[] = [
         prepaga: '220633',
         patologia: 'E03',
         phone: '123456987',
+        deseaDonar: true,
+        donanteActivo: true,
+        sex: 'MASCULINO',
     },
 ]

@@ -1,4 +1,4 @@
-export const dateFormat = (date?: Date) => {
+export const dateFormat = (date?: Date | string) => {
     const fecha = date ? new Date(date) : new Date()
     // Crear una nueva fecha
     // Obtener el nombre del día
@@ -33,6 +33,7 @@ export const dateFormat = (date?: Date) => {
     const nombreMes = meses[fecha.getMonth()]
 
     return {
+        date: fecha,
         hora: hora,
         diaNombre: nombreDia,
         diaNumero: dia,

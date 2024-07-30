@@ -15,6 +15,7 @@ import { PiEyeClosed } from 'react-icons/pi'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { tokenData } from '@/utils/jwt-decode'
+import { Medico, Paciente } from '@/interfaces/user.interface'
 
 type Inputs = {
     email: string
@@ -46,12 +47,22 @@ export default function LoginForm() {
                 duration: 2000,
             })
         }
-        toast.success('Ingreso correcto...', {
-            className: 'bg-green-600 text-white',
-            position: 'top-center',
-            duration: 2000,
-        })
-        route.push('/dashboard')
+        if (loginResponse.user.role === 'MEDICO') {
+            toast.success('Ingreso correcto...', {
+                className: 'bg-green-600 text-white',
+                position: 'top-center',
+                duration: 2000,
+            })
+            route.push('/dashboard')
+        }
+        if (loginResponse.user.role === 'PACIENTE') {
+            toast.success('Ingreso correcto...', {
+                className: 'bg-green-600 text-white',
+                position: 'top-center',
+                duration: 2000,
+            })
+            route.push('/paciente')
+        }
     }
 
     const fetchLogin = async (email: string, password: string) => {
@@ -59,17 +70,7 @@ export default function LoginForm() {
         interface UserLogin {
             accessToken: string
             refreshToken: string
-            user: {
-                email: string
-                firstName: string
-                lastName: string
-                phone: string
-                province: string
-                city: string
-                nroDocumento: number
-                role: string
-                photo: string
-            }
+            user: Paciente & Medico
         }
 
         const controller = new AbortController()
@@ -90,23 +91,10 @@ export default function LoginForm() {
             })
 
             clearTimeout(timeoutId)
-            console.log({ status_res: res.status })
             if (res.ok) {
                 const data: UserLogin = await res.json()
-                console.log({ infoToken: tokenData(data.accessToken) })
-                setUser({
-                    id: 1,
-                    city: data.user.city,
-                    email: data.user.email,
-                    especialidad: '',
-                    firstName: data.user.firstName,
-                    lastname: data.user.lastName,
-                    photo: data.user.photo,
-                    nroDocumento: data.user.nroDocumento,
-                    phone: data.user.phone,
-                    province: data.user.province,
-                    role: 'MEDICO',
-                })
+                console.log({ infoToken: tokenData(data.accessToken), data })
+                setUser(data.user)
                 setToken(data.accessToken)
                 return data
             }
@@ -165,10 +153,30 @@ export default function LoginForm() {
                     <FiLogIn className='text-xl' />
                     <p>Ingresar</p>
                 </Button>
-                <Button color='warning' onClick={() => route.push('/register')}>
+                <Button color='warning' onClick={() => route.push('/register')} isLoading={isLoading}>
                     <RiUserAddLine className='text-xl' />
                     <p>Registrarse</p>
                 </Button>
+                <div className='flex justify-between'>
+                    <Button
+                        color='primary'
+                        variant='ghost'
+                        isLoading={isLoading}
+                        isDisabled={isLoading}
+                        onClick={() => submitData({ email: 'medicUser@test.justina.io', password: 'password123' })}
+                    >
+                        <p>Acceso demo Médico</p>
+                    </Button>
+                    <Button
+                        color='primary'
+                        variant='ghost'
+                        isLoading={isLoading}
+                        isDisabled={isLoading}
+                        onClick={() => submitData({ email: 'patient@test.justina.io', password: 'patient123' })}
+                    >
+                        <p>Acceso demo Paciente</p>
+                    </Button>
+                </div>
             </div>
         </form>
     )

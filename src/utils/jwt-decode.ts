@@ -1,3 +1,9 @@
+interface TokenDecoded {
+    role: 'MEDICO' | 'PACIENTE' | 'ADMINISTRADOR'
+    iat: number
+    exp: number
+}
+
 export const tokenData = (token: string) => {
     const [_alg, base64Url] = token.split('.')
     const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/')
@@ -10,5 +16,5 @@ export const tokenData = (token: string) => {
             .join('')
     )
 
-    return JSON.parse(jsonPayload)
+    return JSON.parse(jsonPayload) as TokenDecoded
 }

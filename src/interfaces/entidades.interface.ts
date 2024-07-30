@@ -54,7 +54,7 @@ export type Evento = {
     id: 1
     type: 'REUNION' | 'CONFERENCIA' | 'CITA' | 'OTRO'
     description: string
-    startDatetime: Date
-    endDateTime: Date
+    startDatetime: string
+    endDateTime: string
     place: string
 }
