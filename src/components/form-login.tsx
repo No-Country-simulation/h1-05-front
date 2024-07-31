@@ -33,7 +33,6 @@ export default function LoginForm() {
     } = useForm<Inputs>({
         resolver: zodResolver(loginSchema),
     })
-
     const route = useRouter()
     const [showPass, setShowPass] = useState(false)
 

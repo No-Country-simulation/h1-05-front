@@ -1,10 +1,9 @@
 import { IconType } from 'react-icons'
-import { Especialidad } from './entidades.interface'
 
 export type Paciente = Usuario & {
     factorSanguineo: string
-    patologia: string
-    prepaga: string
+    estadoDelPaciente: 'Pre-trasplante' | 'Trasplantado' | 'Donante'
+    organoEnfermo: string
 }
 
 export type Medico = Usuario & {
