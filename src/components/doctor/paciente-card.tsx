@@ -10,8 +10,8 @@ import { calculateAge } from '@/utils/calculateAge'
 import { prepagas } from '@/constants/nomenclaturas/prepagas'
 export default function PacienteCard({ paciente }: { paciente: Paciente }) {
     if (!paciente) return null
-    const findPatologia = enfermedades.find(({ detalle }) => detalle === paciente.patologia)
-    const findPrepaga = prepagas.find(({ entidad }) => entidad === paciente.prepaga)
+    // const findPatologia = enfermedades.find(({ detalle }) => detalle === paciente.patologia)
+    // const findPrepaga = prepagas.find(({ entidad }) => entidad === paciente.prepaga)
 
     return (
         <div className='flex flex-col bg-slate-50 px-3 py-2 rounded-lg shadow-md border-2 border-purple-600/20 hover:scale-105 sm:hover:scale-95 transition-all'>
@@ -25,7 +25,7 @@ export default function PacienteCard({ paciente }: { paciente: Paciente }) {
                     <p className='font-bold text-2xl'>
                         {paciente.firstName} {paciente.lastName}
                     </p>
-                    {findPatologia && <p className='italic'>Patología: {findPatologia.detalle}</p>}
+                    {/* {findPatologia && <p className='italic'>Patología: {findPatologia.detalle}</p>} */}
                 </div>
             </div>
             <div className='flex flex-row items-center justify-between py-1'>
@@ -52,11 +52,11 @@ export default function PacienteCard({ paciente }: { paciente: Paciente }) {
                     <p>{paciente.email}</p>
                 </div>
             </div>
-            {findPrepaga && (
+            {/* {findPrepaga && (
                 <div className='flex flex-row flex-wrap gap-2 my-2'>
                     <Chip color='warning'>{findPrepaga.entidad}</Chip>
                 </div>
-            )}
+            )} */}
         </div>
     )
 }
