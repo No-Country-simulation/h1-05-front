@@ -19,7 +19,7 @@ export default function PacienteCard({ paciente }: { paciente: Paciente }) {
             <div className='flex flex-col bg-slate-50 px-3 py-2 rounded-lg shadow-md border-2 border-purple-600/20 hover:scale-105 sm:hover:scale-[98%] cursor-pointer transition-all'>
                 <div className='flex flex-row items-center justify-start gap-3 border-b-1 border-purple-600 py-2'>
                     <Image
-                        src='/img/samples/doctor.png'
+                        src={paciente.photo ? paciente.photo : '/img/samples/doctor.png'}
                         alt='Imagen del perfil paciente'
                         className='object-cover rounded-md max-w-20'
                     />
