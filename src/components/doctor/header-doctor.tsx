@@ -15,7 +15,7 @@ export default function HeaderDoctor() {
                 <div>
                     <h1 className='text-3xl font-bold'>
                         Buen día, <br />
-                        Dr. {user?.firstName} {user?.lastname}
+                        Dr. {user?.firstName} {user?.lastName}
                     </h1>
                     <p className='text-gray-200'>Hoy, {`${diaNombre} ${diaNumero} de ${mesNombre}`}</p>
                 </div>

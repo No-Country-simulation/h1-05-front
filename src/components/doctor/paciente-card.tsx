@@ -23,7 +23,7 @@ export default function PacienteCard({ paciente }: { paciente: Paciente }) {
                 />
                 <div>
                     <p className='font-bold text-2xl'>
-                        {paciente.firstName} {paciente.lastname}
+                        {paciente.firstName} {paciente.lastName}
                     </p>
                     {findPatologia && <p className='italic'>Patología: {findPatologia.detalle}</p>}
                 </div>

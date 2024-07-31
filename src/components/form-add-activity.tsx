@@ -5,21 +5,48 @@ import { FormEvent, useEffect, useState } from 'react'
 import { userStore } from '@/store/user-store'
 import { eventsUserStore } from '@/store/events-user'
 import { toast } from 'sonner'
+import { Paciente } from '@/interfaces/user.interface'
 
 const tiposEventos = ['REUNION', 'CONFERENCIA', 'CITA', 'OTRO']
 
 export default function AddActividad({ fecha }: { fecha: string }) {
+    const [pacientes, setPacientes] = useState<Paciente[]>([])
     const { getEvents } = eventsUserStore()
     const { token } = userStore()
     const [inputForms, setInputs] = useState({
         description: '',
         place: '',
         type: tiposEventos[0],
+        patientId: 0,
     })
     const [loading, setLoading] = useState(false)
     const timeNow = parseAbsoluteToLocal(new Date(fecha).toISOString())
     let [time, setTime] = useState<TimeInputValue>(timeNow)
     const dateCalendar = parseDate(fecha)
+
+    useEffect(() => {
+        const loadMedicos = async (token: string) => {
+            interface ResponsePatients {
+                page: number
+                size: number
+                total: number
+                pages: number
+                items: Paciente[]
+            }
+
+            const url = process.env.NEXT_PUBLIC_URL_BACK
+            const res = await fetch(`${url}/patients?page=1&size=20&doctorId=0`, {
+                headers: {
+                    accept: '*/*',
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+
+            const data: ResponsePatients = await res.json()
+            setPacientes(data.items)
+        }
+        if (token) loadMedicos(token)
+    }, [token])
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         setLoading(true)
@@ -51,22 +78,35 @@ export default function AddActividad({ fecha }: { fecha: string }) {
                 },
                 body: JSON.stringify({ ...dataToSendBackend }),
             })
-            console.log(res)
+
             if (res.ok) {
+                toast.success('Agendado exitosamente, actualizando calendario...', { position: 'top-center' })
                 getEvents(token)
             } else {
-                toast.error('No se pudo crear el evento', { position: 'top-center' })
+                toast.error('No se pudo crear el evento, ver consola', { position: 'top-center' })
             }
         } catch (error) {
             console.log(error)
         } finally {
             setLoading(false)
+            setInputs({
+                description: '',
+                place: '',
+                patientId: 0,
+                type: tiposEventos[0],
+            })
         }
     }
 
-    const handleSelectionChange = (keys: Selection) => {
-        const type = Array.from(keys)[0] as string
+    const handleSelectionEventTypes = (keys: Selection) => {
+        const type = Array.from(keys)[0].toString()
         setInputs({ ...inputForms, type })
+    }
+
+    const handleSelectionPacientes = (keys: Selection) => {
+        const pacienteId = Array.from(keys)[0]
+        const patientId = pacienteId ? Number(pacienteId) : 0
+        setInputs({ ...inputForms, patientId })
     }
 
     return (
@@ -75,7 +115,7 @@ export default function AddActividad({ fecha }: { fecha: string }) {
             <Select
                 label='Seleccione tipo de evento'
                 defaultSelectedKeys={[tiposEventos[0]]}
-                onSelectionChange={handleSelectionChange}
+                onSelectionChange={handleSelectionEventTypes}
                 isRequired
             >
                 {tiposEventos.map((tipo) => (
@@ -100,6 +140,17 @@ export default function AddActividad({ fecha }: { fecha: string }) {
                 minLength={5}
                 isRequired
             />
+            {pacientes.length > 0 && (
+                <Select
+                    label='Si la actividad involucra un usuario escoja:'
+                    onSelectionChange={handleSelectionPacientes}
+                >
+                    {pacientes.map((paciente) => (
+                        <SelectItem key={paciente.id}>{`${paciente.firstName} ${paciente.lastName}`}</SelectItem>
+                    ))}
+                </Select>
+            )}
+
             <Button color='warning' type='submit' isDisabled={loading} isLoading={loading}>
                 Crear nueva actividad
             </Button>

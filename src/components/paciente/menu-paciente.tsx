@@ -31,7 +31,7 @@ export default function MenuPaciente() {
                 toast.error('Su sesión ha expirado, ingrese nuevamente')
                 route.push('/login')
             } else {
-                if (infoToken.role !== 'MEDICO') {
+                if (infoToken.role !== 'PACIENTE') {
                     route.push('/')
                 } else {
                     getEvents(token)

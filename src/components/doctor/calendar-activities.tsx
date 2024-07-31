@@ -9,13 +9,11 @@ export default function CalendarActivities() {
     return (
         <div className='p-4'>
             <div>
-                <h3 className='text-lg font-semibold mb-4'>Actividades</h3>
+                <h3 className='text-lg font-semibold mb-4'>Tus eventos agendados</h3>
                 {isLoading ? (
                     <Cargando />
                 ) : events.length === 0 && !isLoading ? (
-                    <p className='text-sm font-semibold'>
-                        No tienes eventos agendados, ve al calendario para crear el primero!
-                    </p>
+                    <p className='text-sm font-semibold'>No tienes eventos agendados</p>
                 ) : (
                     events.map((evento) => <Activity key={evento.id} actividad={evento} />)
                 )}
