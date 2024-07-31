@@ -1,5 +1,4 @@
 import { IconType } from 'react-icons'
-import { Especialidad } from './entidades.interface'
 
 export type Paciente = Usuario & {
     factorSanguineo: string

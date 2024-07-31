@@ -1,4 +1,5 @@
 export const calculateAge = (nacimiento: Date | string) => {
+    if (!nacimiento) return 0
     const today = new Date()
     const born = typeof nacimiento === 'string' ? new Date(nacimiento) : nacimiento
     let age = today.getFullYear() - born.getFullYear()
