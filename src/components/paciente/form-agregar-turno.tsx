@@ -1,63 +1,66 @@
 'use client'
-import { Autocomplete, AutocompleteItem } from '@nextui-org/react'
-import { useRouter } from 'next/navigation'
-import { Key, useMemo, useState } from 'react'
+import {
+    Autocomplete,
+    AutocompleteItem,
+    Calendar,
+    DateInput,
+    TimeInput,
+    type CalendarDate,
+    TimeInputValue,
+    Button,
+} from '@nextui-org/react'
+import { parseDate, parseAbsoluteToLocal } from '@internationalized/date'
+import { useState, Key } from 'react'
 import { IoIosArrowBack } from 'react-icons/io'
+import { useRouter } from 'next/navigation'
 import { IoSearch } from 'react-icons/io5'
-import { medicamentos } from '@/constants/nomenclaturas/medicamentos'
-import { medicosDisponibles } from '@/constants/demo-medicos-disponibles-para-turnos'
-import useDebounce from '@/hooks/useDebounce'
-import { MedicosDisponibles } from '@/interfaces/medico-disponible.interface'
-import CardMedicoDisponible from '@/components/paciente/card-medico-disponible'
-
-import CalendarDashboard from '@/components/doctor/calendar-dashboard'
+import { DemoMedicosDisponibles } from '@/constants/demo-medicos-disponibles-para-turnos'
+import { dateFormat } from '@/utils/dateFormat'
 
 export default function formAgregarTurno() {
     const route = useRouter()
-    const [value, setValue] = useState('')
-    // const [medicosDisponiblesBuscado, setMedicoDisponibleBuscado] = useState<MedicosDisponibles[]>([])
-    const debouncedValue = useDebounce(value, 300)
+    const formatDate = (date: Date) => {
+        return date.toLocaleDateString('en-CA') // en-CA usa YYYY-MM-DD
+    }
 
-    //consultar a backend por médicos disponibles
+    const [value, setValue] = useState(parseDate(formatDate(new Date())))
+    const [doctorSearched, setDoctorSearched] = useState('')
 
-    // const filteredMedicamentos = useMemo(() => {
-    //     const seen = new Set()
-    //     return medicamentos
-    //         .filter((medicina) => {
-    //             const esNombre = medicina.nombre_comercial.toLowerCase().includes(debouncedValue.toLowerCase())
-    //             if (esNombre && !seen.has(medicina.nombre_comercial.toLowerCase() + medicina.POTENCIA?.toLowerCase())) {
-    //                 seen.add(medicina.nombre_comercial.toLowerCase() + medicina.POTENCIA?.toLowerCase())
-    //                 return true
-    //             }
-    //             return false
-    //         })
-    //         .slice(0, 10)
-    // }, [debouncedValue])
+    //fecha
+    const timeZoneClient = Intl.DateTimeFormat().resolvedOptions().timeZone
+    const { diaNombre, diaNumero, mesNombre, date } = dateFormat(value.toDate(timeZoneClient))
+    const dateCalendar = parseDate(formatDate(date))
+    //hora
+    const timeNow = parseAbsoluteToLocal(new Date(formatDate(date)).toISOString())
+    let [time, setTime] = useState<TimeInputValue>(timeNow)
+    //filtrar al doctor buscado en DemoMedicosDisponibles
+    const medicosDisponibles = DemoMedicosDisponibles.filter(
+        (medico) =>
+            medico.firstName.toLowerCase().includes(doctorSearched.toLowerCase()) ||
+            medico.lastname.toLowerCase().includes(doctorSearched.toLowerCase())
+    )
 
-    // const handleAutocomplete = (input: Key | null) => {
-    //     console.log(input)
-    //     if (input) {
-    //         const findMedicina = medicamentos.find((medicina) => medicina.clave_csf === input)
-    //         console.log(findMedicina)
-    //     }
-    // }
-
-    // const buscarCita = (value: string) => {
-    //     return medicosDisponibles.filter(
-    //         (medico) =>
-    //             medico.firstName.toLowerCase().includes(value.toLowerCase()) ||
-    //             medico.lastname.toLowerCase().includes(value.toLowerCase())
-    //     )
-    // }
+    const handleChangeCalendar = (value: CalendarDate) => {
+        setValue(value)
+    }
 
     const handleInputChange = (value: string) => {
         console.log(value)
         if (value) {
-            setValue(value)
+            setDoctorSearched(value)
         }
-        // const resultadosBusqueda = buscarCita(value)
-        // setMedicoDisponibleBuscado(resultadosBusqueda)
     }
+
+    const handleAutocomplete = (input: Key | null) => {
+        console.log(input)
+        if (input) {
+            const findDoctor = medicosDisponibles.find(
+                (medico) => medico.firstName === input || medico.lastname === input
+            )
+            console.log(findDoctor)
+        }
+    }
+
     return (
         <div className='space-y-4'>
             <div className='flex items-center justify-center'>
@@ -67,23 +70,38 @@ export default function formAgregarTurno() {
                 />
                 <h1 className='font-bold  flex-auto text-center'>Agregar turno</h1>
             </div>
-            <p>Selecciona el medicamento a asignar.</p>
-            <Autocomplete
-                label='Buscar médico / especialidad'
-                className='max-w-xm w-full'
-                color='secondary'
-                startContent={<IoSearch />}
-                onInputChange={handleInputChange}
-                // onSelectionChange={handleAutocomplete}
-            >
-                {medicosDisponibles.map((medico) => (
-                    <AutocompleteItem key={medico.id} value={medico.firstName + ' ' + medico.lastname}>
-                        {medico.firstName + ' ' + medico.lastname}
-                    </AutocompleteItem>
-                ))}
-            </Autocomplete>
-            <div className='flex justify-center'>
-                <CalendarDashboard />
+            <div className='flex flex-col sm:flex-row gap-3 justify-center'>
+                <Calendar
+                    weekdayStyle='narrow'
+                    showMonthAndYearPickers={true}
+                    color='secondary'
+                    value={value}
+                    onChange={handleChangeCalendar}
+                />
+                <div className='space-y-4'>
+                    <Autocomplete
+                        label='Buscar doctor / especialidad'
+                        defaultItems={medicosDisponibles}
+                        className='max-w-xm w-full'
+                        color='secondary'
+                        startContent={<IoSearch />}
+                        onInputChange={handleInputChange}
+                        onSelectionChange={handleAutocomplete}
+                    >
+                        {(medico) => (
+                            <AutocompleteItem key={medico.id} value={medico.firstName + ' ' + medico.lastname}>
+                                {medico.firstName + ' ' + medico.lastname}
+                            </AutocompleteItem>
+                        )}
+                    </Autocomplete>
+                    <div className='flex '>
+                        <DateInput isRequired label='Fecha de turno' value={dateCalendar} />
+                        <TimeInput isRequired label='Hora del turno' hideTimeZone value={time} onChange={setTime} />
+                    </div>
+                    <div className='text-right'>
+                        <Button color='secondary'>Crear turno</Button>
+                    </div>
+                </div>
             </div>
         </div>
     )
