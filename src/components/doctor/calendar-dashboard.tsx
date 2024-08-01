@@ -40,7 +40,7 @@ export default function CalendarDashboard() {
                     <span className='text-lg font-semibold bg-white w-8 h-8 flex justify-center items-center rounded-full'>
                         {filterEvents.length}
                     </span>
-                    <span className='font-bold'>Actividad agendada hoy</span>
+                    <span className='font-bold'>Actividad agendada</span>
                 </div>
             )}
             {filterEvents.length > 1 && (
@@ -48,7 +48,7 @@ export default function CalendarDashboard() {
                     <span className='text-lg font-semibold bg-white w-8 h-8 flex justify-center items-center rounded-full'>
                         {filterEvents.length}
                     </span>
-                    <span className='font-bold'>Actividades agendadas hoy</span>
+                    <span className='font-bold'>Actividades agendadas</span>
                 </div>
             )}
             <div className='flex flex-col sm:flex-row gap-3 items-center justify-center'>

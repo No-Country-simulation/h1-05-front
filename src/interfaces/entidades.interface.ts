@@ -1,3 +1,5 @@
+import { Medico, Paciente } from './user.interface'
+
 export type Especialidad = {
     id: number
     tipo: string
@@ -57,4 +59,6 @@ export type Evento = {
     startDatetime: string
     endDateTime: string
     place: string
+    patient?: Paciente
+    doctor?: Medico
 }

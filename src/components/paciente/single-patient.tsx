@@ -1,6 +1,6 @@
 import { Paciente } from '@/interfaces/user.interface'
 import { calculateAge } from '@/utils/calculateAge'
-import { Button, Calendar, CalendarDate, Image } from '@nextui-org/react'
+import { Button, Calendar, CalendarDate, Image, Tab, Tabs } from '@nextui-org/react'
 import { useState } from 'react'
 import { BiCalendarCheck } from 'react-icons/bi'
 import { parseDate } from '@internationalized/date'
@@ -10,6 +10,7 @@ import { GrMail } from 'react-icons/gr'
 import { RiMapPin2Fill } from 'react-icons/ri'
 import AddActividad from '../form-add-activity'
 import { dateFormat } from '@/utils/dateFormat'
+import CalendarActivities from '../doctor/calendar-activities'
 
 export default function SinglePatient({ patient }: { patient: Paciente }) {
     if (!patient) return null
@@ -27,14 +28,16 @@ export default function SinglePatient({ patient }: { patient: Paciente }) {
     const timeZoneClient = Intl.DateTimeFormat().resolvedOptions().timeZone
     const { date } = dateFormat(value.toDate(timeZoneClient))
 
-    let color: 'green' | 'purple' | 'yellow' = 'purple'
-    if (patient.estadoDelPaciente === 'Donante') color = 'green'
-    if (patient.estadoDelPaciente === 'Trasplantado') color = 'yellow'
+    let color: string = 'bg-purple-300'
+    if (patient.estadoDelPaciente === 'Donante') color = 'bg-green-300'
+    if (patient.estadoDelPaciente === 'Trasplantado') color = 'bg-yellow-400'
     const edad = calculateAge(patient.fechaNacimiento)
     return (
         <>
             <div className='w-full sm:w-[90%] bg-white rounded-sm'>
-                <div className={`w-full bg-${color}-400 text-center py-1 rounded-sm`}>{patient.estadoDelPaciente}</div>
+                <div className={`w-full ${color} text-center py-1 rounded-sm font-black`}>
+                    {patient.estadoDelPaciente}
+                </div>
                 {/* <div className='grid grid-cols-[2fr_3fr] items-start justify-between '> */}
                 <div className='flex flex-col md:flex-row gap-3 w-full text-center md:text-start justify-between items-center p-3'>
                     <Image src={patient.photo} alt='Doctor' className='object-cover w-40 relative' />
@@ -77,30 +80,36 @@ export default function SinglePatient({ patient }: { patient: Paciente }) {
                                 )}
                             </div>
                         </div>
-                        <Button
-                            color='secondary'
-                            className='w-fit'
-                            variant='ghost'
-                            radius='sm'
-                            startContent={<BiCalendarCheck className='text-2xl' />}
-                        >
-                            Agendar cita
-                        </Button>
                     </div>
                 </div>
             </div>
-            <div className='flex gap-3 items-center'>
-                <Calendar
-                    weekdayStyle='narrow'
-                    showMonthAndYearPickers={true}
-                    color='secondary'
-                    value={value}
-                    onChange={handleChangeCalendar}
-                />
-                <div className='min-w-80'>
-                    <AddActividad fecha={formatDate(date)} patient={patient} />
-                </div>
-            </div>
+            <Tabs color='secondary' variant='bordered' className='mt-2'>
+                <Tab key='cita' title='Agenda'>
+                    <div className='flex flex-col md:flex-row gap-3 items-start'>
+                        <div className='flex flex-col gap-2'>
+                            <p className='font-bold'>Agregar un evento:</p>
+                            <Calendar
+                                weekdayStyle='narrow'
+                                showMonthAndYearPickers={true}
+                                color='secondary'
+                                value={value}
+                                onChange={handleChangeCalendar}
+                            />
+                            <AddActividad fecha={formatDate(date)} patient={patient} />
+                        </div>
+                        <CalendarActivities patient={patient} />
+                    </div>
+                </Tab>
+                <Tab key='tratamiento' title='Ficha clínica'>
+                    <div>
+                        <p>
+                            Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+                            commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
+                            dolore eu fugiat nulla pariatur.
+                        </p>
+                    </div>
+                </Tab>
+            </Tabs>
         </>
     )
 }

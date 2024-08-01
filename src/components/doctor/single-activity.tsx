@@ -15,15 +15,20 @@ export default function Activity({ actividad }: { actividad: Evento }) {
         <div className={`mb-4 p-4 border-l-4 ${tipo} rounded-lg flex items-center`}>
             {/* <Image src='/img/samples/doctor.png' alt='Jorge Perez' className='w-12 h-12 rounded-full mr-4' /> */}
             <div className='flex-1'>
-                <p className='font-semibold'>{actividad.place}</p>
-                <p className='text-sm text-gray-600'>
-                    {actividad.type} | {actividad.description}
+                <p className='font-semibold text-sm md:text-base'>
+                    {actividad.type}: {actividad.place}
                 </p>
+                <p className='text-sm text-gray-600'>{actividad.description}</p>
             </div>
             <div className='text-right'>
-                <p suppressHydrationWarning className='font-semibold text-purple-700'>
-                    {diaNombre} {diaNumero} a las {hora}hrs
+                <p suppressHydrationWarning className='text-xs font-semibold text-purple-700 md:text-sm'>
+                    {diaNombre} {diaNumero} de {mesNombre} a las {hora}hrs
                 </p>
+                {actividad.patient && (
+                    <p className='text-sm font-semibold text-purple-500 md:text-base'>
+                        Paciente: {actividad.patient.firstName} {actividad.patient.lastName}
+                    </p>
+                )}
             </div>
         </div>
     )

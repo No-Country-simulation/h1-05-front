@@ -157,7 +157,7 @@ export default function AddActividad({ fecha, patient }: { fecha: string; patien
                 isRequired
             />
             {pacientes.length > 0 && !patient && (
-                <Select label='Elija un usuario (opcional)' onSelectionChange={handleSelectionPacientes}>
+                <Select label='Elija un paciente (opcional)' onSelectionChange={handleSelectionPacientes}>
                     {pacientes.map((paciente) => (
                         <SelectItem key={paciente.id}>{`${paciente.firstName} ${paciente.lastName}`}</SelectItem>
                     ))}
