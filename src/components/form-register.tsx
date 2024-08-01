@@ -26,6 +26,7 @@ import FormImage from './formImage'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { DateValue, parseDate, today, getLocalTimeZone } from '@internationalized/date'
+import Link from 'next/link'
 
 type Inputs = {
     name: string
@@ -54,7 +55,6 @@ export default function RegisterComponent() {
     const [fechaNacimiento, setNacimiento] = useState<DateValue>(parseDate('1990-12-12'))
     const [deseaDonar, setDonar] = useState(true)
     const [ciudades, setCiudades] = useState<Ciudades[]>([])
-    const [photo, setPhoto] = useState('')
     const {
         register,
         handleSubmit,
@@ -74,8 +74,8 @@ export default function RegisterComponent() {
         console.log({ ...data, fechaNacimiento, deseaDonar, file })
         const url = process.env.NEXT_PUBLIC_URL_BACK
         const timeZoneClient = Intl.DateTimeFormat().resolvedOptions().timeZone
-        let newPhoto = photo
-            ? photo
+        let newPhoto = file
+            ? file
             : 'https://img.freepik.com/premium-vector/doctor-profile-with-medical-service-icon_617655-48.jpg'
         try {
             const res = await fetch(`${url}/auth/register`, {
@@ -179,11 +179,6 @@ export default function RegisterComponent() {
         else setPassColor('success')
     }, [watch('password'), watch('confirmPassword')])
 
-    useEffect(() => {
-        if (file) {
-            setPhoto(file)
-        }
-    }, [file])
     return (
         <form onSubmit={handleSubmit(handleFormSend)}>
             {step === 1 && (
@@ -199,7 +194,7 @@ export default function RegisterComponent() {
                         <Radio value='MEDICO'>Médico</Radio>
                         <Radio value='PACIENTE'>Paciente</Radio>
                     </RadioGroup> */}
-                    <FormImage setFile={setFile} />
+                    <FormImage file={file} setFile={setFile} />
                 </>
             )}
             {step === 1 && (
@@ -394,6 +389,11 @@ export default function RegisterComponent() {
                     Crear cuenta
                 </Button>
             )}
+            <Link href='/login'>
+                <Button color='warning' variant='ghost' className='w-full my-4'>
+                    Volver al login
+                </Button>
+            </Link>
         </form>
     )
 }
