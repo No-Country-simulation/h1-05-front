@@ -5,7 +5,7 @@ export const medico: Medico = {
     city: 'Buenos Aires',
     email: 'doctor@correodemo.com',
     especialidad: 'Transplantes',
-    lastname: 'Espinoza',
+    lastName: 'Espinoza',
     firstName: 'Iñaki',
     phone: '529898989898',
     role: 'MEDICO',
@@ -15,4 +15,7 @@ export const medico: Medico = {
     deseaDonar: true,
     donanteActivo: true,
     sex: 'MASCULINO',
+    fechaNacimiento: '1992-12-03',
+    medicId: 2,
+    patientId: null,
 }

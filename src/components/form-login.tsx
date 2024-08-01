@@ -33,7 +33,6 @@ export default function LoginForm() {
     } = useForm<Inputs>({
         resolver: zodResolver(loginSchema),
     })
-
     const route = useRouter()
     const [showPass, setShowPass] = useState(false)
 
@@ -163,9 +162,9 @@ export default function LoginForm() {
                         variant='ghost'
                         isLoading={isLoading}
                         isDisabled={isLoading}
-                        onClick={() => submitData({ email: 'medicUser@test.justina.io', password: 'password123' })}
+                        onClick={() => submitData({ email: 'medicuser@test.justina.io', password: 'password123' })}
                     >
-                        <p>Acceso demo Médico</p>
+                        <p>Demo Médico</p>
                     </Button>
                     <Button
                         color='primary'
@@ -174,7 +173,7 @@ export default function LoginForm() {
                         isDisabled={isLoading}
                         onClick={() => submitData({ email: 'patient@test.justina.io', password: 'patient123' })}
                     >
-                        <p>Acceso demo Paciente</p>
+                        <p>Demo Paciente</p>
                     </Button>
                 </div>
             </div>

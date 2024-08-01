@@ -1,4 +1,4 @@
-type TipoSangre = 'A+' | 'A-' | 'B+' | 'B-' | 'AB+' | 'AB-' | 'O+' | 'O-'
+import { TipoSangre } from '@/interfaces/user.interface'
 
 const mapaCompatibilidadSanguinea: Record<TipoSangre, TipoSangre[]> = {
     'A+': ['A+', 'AB+'],

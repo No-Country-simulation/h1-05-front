@@ -8,7 +8,7 @@ export default function HeaderDoctor({ medico }: { medico: Medico }) {
                 <Image src={medico.photo} className='w-28 h-2w-28 drop-shadow-xl' />
                 <div className='flex flex-col'>
                     <h2 className='text-3xl'>
-                        {medico.firstName} {medico.lastname}
+                        {medico.firstName} {medico.lastName}
                     </h2>
                     <p className='font-bold text-sm italic'>{medico.email}</p>
                     <p className='font-bold text-sm'>Teléfono: +{medico.photo}</p>

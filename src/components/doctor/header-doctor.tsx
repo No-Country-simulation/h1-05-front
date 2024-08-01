@@ -7,7 +7,6 @@ import HeaderTotals from './header-totals'
 export default function HeaderDoctor() {
     const { user } = userStore()
     const { diaNombre, diaNumero, mesNombre } = dateFormat()
-    console.log(user)
     return (
         <div className='relative header-doctor flex flex-col items-start justify-between shadow-md mb-6 text-white'>
             <div className='absolute inset-0 bg-purple-950/90 z-10'></div>
@@ -15,7 +14,7 @@ export default function HeaderDoctor() {
                 <div>
                     <h1 className='text-3xl font-bold'>
                         Buen día, <br />
-                        Dr. {user?.firstName} {user?.lastname}
+                        Dr. {user?.firstName} {user?.lastName}
                     </h1>
                     <p className='text-gray-200'>Hoy, {`${diaNombre} ${diaNumero} de ${mesNombre}`}</p>
                 </div>

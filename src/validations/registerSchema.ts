@@ -6,7 +6,8 @@ const mappedEspecialidades = especialidades.map((esp) => esp.id.toString()) as [
 export const registerSchema = z
     .object({
         name: z.string().min(2, { message: 'El nombre debe ser mínimo de 2 caracteres' }),
-        lastname: z.string().min(2, { message: 'El apellido debe ser mínimo de 2 caracteres' }),
+        lastName: z.string().min(2, { message: 'El apellido debe ser mínimo de 2 caracteres' }),
+        sex: z.enum(['MASCULINO', 'FEMENINO'], { message: 'Debe seleccionar uno' }),
         phoneNumber: z
             .string()
             .refine((phoneNumber) => !isNaN(parseInt(phoneNumber)), { message: 'Debe ser un número de celular' }),

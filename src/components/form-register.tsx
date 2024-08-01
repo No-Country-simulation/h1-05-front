@@ -4,6 +4,8 @@ import {
     Autocomplete,
     AutocompleteItem,
     Button,
+    Checkbox,
+    DatePicker,
     Input,
     Radio,
     RadioGroup,
@@ -23,10 +25,14 @@ import { BiSolidLock, BiSolidLockOpen } from 'react-icons/bi'
 import FormImage from './formImage'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
+import { DateValue, parseDate, today, getLocalTimeZone } from '@internationalized/date'
+import Link from 'next/link'
 
 type Inputs = {
     name: string
-    lastname: string
+    lastName: string
+    sex: string
+    deseaDonar: boolean
     phoneNumber: string
     medicalLicense: string
     dni: string
@@ -43,10 +49,12 @@ export default function RegisterComponent() {
     const [step, setStep] = useState<1 | 2>(1)
     const [passPower, setPassPower] = useState(0)
     const [passColor, setPassColor] = useState<'danger' | 'warning' | 'success'>('danger')
-    const [role, setRole] = useState('medico')
+    const [role, setRole] = useState<'MEDICO' | 'PACIENTE' | 'ADMINISTRADOR'>('MEDICO')
     const [file, setFile] = useState<string | null>(null)
     const [isLoading, setLoading] = useState(false)
-    const route = useRouter()
+    const [fechaNacimiento, setNacimiento] = useState<DateValue>(parseDate('1990-12-12'))
+    const [deseaDonar, setDonar] = useState(true)
+    const [ciudades, setCiudades] = useState<Ciudades[]>([])
     const {
         register,
         handleSubmit,
@@ -58,13 +66,15 @@ export default function RegisterComponent() {
     } = useForm<Inputs>({
         resolver: zodResolver(registerSchema),
     })
+    const route = useRouter()
 
     // PENDING: handleSubmit, useStates
     const handleFormSend = async (data: Inputs) => {
         setLoading(true)
-        console.log({ ...data, file })
+        console.log({ ...data, fechaNacimiento, deseaDonar, file })
         const url = process.env.NEXT_PUBLIC_URL_BACK
-        let photo = file
+        const timeZoneClient = Intl.DateTimeFormat().resolvedOptions().timeZone
+        let newPhoto = file
             ? file
             : 'https://img.freepik.com/premium-vector/doctor-profile-with-medical-service-icon_617655-48.jpg'
         try {
@@ -72,26 +82,29 @@ export default function RegisterComponent() {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    accept: '*/*',
                 },
                 body: JSON.stringify({
                     email: data.email,
                     password: data.password,
                     firstName: data.name,
-                    lastName: data.lastname,
+                    lastName: data.lastName,
                     phone: data.phoneNumber,
                     province: data.provincia,
                     city: data.ciudad,
                     license: data.medicalLicense,
                     nroDocumento: Number(data.dni),
                     speciality: data.especialidad[0],
-                    photo: photo,
+                    sex: data.sex,
+                    photo: newPhoto,
+                    fechaNacimiento: fechaNacimiento.toDate(timeZoneClient).toISOString(),
+                    deseaDonar,
                 }),
             })
 
             const dataRes = await res.json()
             console.log({ dataRes })
             if (res.ok) {
+                toast.success('Registrado exitosamente')
                 route.push('/register/success')
             } else {
                 toast.error('No se pudo realizar el registro, intente más tarde.')
@@ -102,8 +115,6 @@ export default function RegisterComponent() {
             setLoading(false)
         }
     }
-
-    const [ciudades, setCiudades] = useState<Ciudades[]>([])
 
     const handleProvinciaSelect = (provincia: string) => {
         if (!provincia) {
@@ -144,6 +155,21 @@ export default function RegisterComponent() {
         return score
     }
 
+    const validateNacimiento = () => {
+        if (!fechaNacimiento) return 'Debe ingresar su nacimiento'
+        if (fechaNacimiento.compare(parseDate('1910-01-01')) < 0) return 'Seleccione una fecha mayor'
+        if (fechaNacimiento.compare(today(getLocalTimeZone())) > 0) return 'Seleccione una fecha menor'
+        return 'Fecha inválida'
+    }
+
+    const isInvalidNacimiento = () => {
+        return (
+            !fechaNacimiento ||
+            fechaNacimiento.compare(parseDate('1910-01-01')) < 0 ||
+            fechaNacimiento.compare(today(getLocalTimeZone())) > 0
+        )
+    }
+
     useEffect(() => {
         const pass = getValues('password')
         const score = validatePassword(pass || '')
@@ -165,15 +191,25 @@ export default function RegisterComponent() {
                         color='secondary'
                         defaultValue={role}
                     >
-                        <Radio value='medico'>Médico</Radio>
-                        <Radio value='paciente'>Paciente</Radio>
-                        <Radio value='clinica'>Clínica/Hospital</Radio>
+                        <Radio value='MEDICO'>Médico</Radio>
+                        <Radio value='PACIENTE'>Paciente</Radio>
                     </RadioGroup> */}
-                    <FormImage setFile={setFile} />
+                    <FormImage file={file} setFile={setFile} />
                 </>
             )}
             {step === 1 && (
                 <div className='grid gap-5 grid-cols-1 mb-5'>
+                    <Select
+                        color='secondary'
+                        errorMessage={errors.sex?.message}
+                        isInvalid={errors.sex?.message ? true : false}
+                        label='Seleccione su género'
+                        defaultSelectedKeys={['FEMENINO']}
+                        {...register('sex')}
+                    >
+                        <SelectItem key='FEMENINO'>Femenino</SelectItem>
+                        <SelectItem key='MASCULINO'>Masculino</SelectItem>
+                    </Select>
                     <Input
                         color='secondary'
                         errorMessage={errors.name?.message}
@@ -183,10 +219,10 @@ export default function RegisterComponent() {
                     />
                     <Input
                         color='secondary'
-                        errorMessage={errors.lastname?.message}
-                        isInvalid={errors.lastname?.message ? true : false}
+                        errorMessage={errors.lastName?.message}
+                        isInvalid={errors.lastName?.message ? true : false}
                         label='Apellido'
-                        {...register('lastname')}
+                        {...register('lastName')}
                     />
                     <Input
                         color='secondary'
@@ -244,8 +280,22 @@ export default function RegisterComponent() {
                 </div>
             )}
 
-            {step !== 1 && role === 'medico' && (
+            {step !== 1 && role === 'MEDICO' && (
                 <div className='grid gap-5 grid-cols-1 md:grid-cols-2 mb-5'>
+                    <DatePicker
+                        label='Fecha de nacimiento'
+                        color='secondary'
+                        isInvalid={isInvalidNacimiento()}
+                        minValue={parseDate('1910-01-01')}
+                        maxValue={today(getLocalTimeZone())}
+                        errorMessage={validateNacimiento()}
+                        showMonthAndYearPickers
+                        value={fechaNacimiento}
+                        onChange={setNacimiento}
+                    />
+                    <Checkbox color='warning' isSelected={deseaDonar} onValueChange={setDonar}>
+                        Soy donante
+                    </Checkbox>
                     <Input
                         color='secondary'
                         errorMessage={errors.phoneNumber?.message}
@@ -339,6 +389,11 @@ export default function RegisterComponent() {
                     Crear cuenta
                 </Button>
             )}
+            <Link href='/login'>
+                <Button color='warning' variant='ghost' className='w-full my-4'>
+                    Volver al login
+                </Button>
+            </Link>
         </form>
     )
 }

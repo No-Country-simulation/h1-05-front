@@ -1,5 +1,5 @@
 'use client'
-import { Select, Selection, SelectItem } from '@nextui-org/react'
+import { Card, Select, Selection, SelectItem, Skeleton } from '@nextui-org/react'
 import { FormEvent, useState } from 'react'
 const tutoriales = [
     {
@@ -18,13 +18,10 @@ const tutoriales = [
 
 export default function SearchVideos() {
     const [videos, setVideos] = useState<string[]>([])
+    const [isLoading, setLoading] = useState(false)
     const handleSelectChange = (input: Selection) => {
         const [arr] = Array.from(input)
         if (arr) searchVideos(arr as string)
-    }
-
-    const sendForm = async (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
     }
 
     const searchVideos = async (consulta: string) => {
@@ -36,43 +33,63 @@ export default function SearchVideos() {
                 videoId: string
             }
         }
+        setLoading(true)
         if (!consulta) return console.log('No se seleccionó consulta')
         const url = process.env.NEXT_PUBLIC_URL_FRONT
         const res = await fetch(`${url}/api/youtube?query=${consulta}`)
         const data: RespYT[] = await res.json()
         const videos = data.map((v) => `https://www.youtube.com/embed/${v.id.videoId}`)
         setVideos(videos)
+        setLoading(false)
     }
 
     return (
         <>
-            <form onSubmit={sendForm} className='w-full flex flex-row items-center justify-center gap-3 px-6'>
-                <Select
-                    onSelectionChange={handleSelectChange}
-                    label='Escoja una opción para ver tutoriales'
-                    className='max-w-screen-sm'
-                    color='secondary'
-                >
-                    {tutoriales.map((item) => (
-                        <SelectItem key={item.search} value={item.search}>
-                            {item.title}
-                        </SelectItem>
-                    ))}
-                </Select>
-            </form>
-            <div className='w-full space-y-4 text-center flex flex-col items-center'>
-                {videos.map((v) => (
-                    <iframe
-                        src={v}
-                        // width={500}
-                        height={280}
-                        allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
-                        allowFullScreen
-                        title='Ejemplo de videos en youtube'
-                        className='px-4 w-full lg:w-1/2'
-                    />
+            <Select
+                onSelectionChange={handleSelectChange}
+                label='Escoja una opción para ver tutoriales'
+                color='secondary'
+                className='max-w-lg'
+            >
+                {tutoriales.map((item) => (
+                    <SelectItem key={item.search} value={item.search}>
+                        {item.title}
+                    </SelectItem>
                 ))}
-            </div>
+            </Select>
+            {isLoading ? (
+                <div className='mt-6 flex flex-col items-center md:flex-row md:justify-evenly gap-3'>
+                    <Card className='w-[27%] space-y-5 p-1' radius='lg'>
+                        <Skeleton className='rounded-lg'>
+                            <div className='h-52 rounded-lg'></div>
+                        </Skeleton>
+                    </Card>
+                    <Card className='w-[27%] space-y-5 p-1' radius='lg'>
+                        <Skeleton className='rounded-lg'>
+                            <div className='h-52 rounded-lg'></div>
+                        </Skeleton>
+                    </Card>
+                    <Card className='w-[27%] space-y-5 p-1' radius='lg'>
+                        <Skeleton className='rounded-lg'>
+                            <div className='h-52 rounded-lg'></div>
+                        </Skeleton>
+                    </Card>
+                </div>
+            ) : (
+                <div className='mt-6 flex flex-col items-center md:flex-row md:justify-evenly gap-3'>
+                    {videos.map((v) => (
+                        <iframe
+                            key={v}
+                            src={v}
+                            height={200}
+                            allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
+                            allowFullScreen
+                            title='Ejemplo de videos en youtube'
+                            className='drop-shadow-xl'
+                        />
+                    ))}
+                </div>
+            )}
         </>
     )
 }
