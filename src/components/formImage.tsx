@@ -3,9 +3,14 @@ import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useState }
 import { Button, Image, Skeleton } from '@nextui-org/react'
 import { toast } from 'sonner'
 const urlFront = process.env.NEXT_PUBLIC_URL_FRONT as string
-export default function FormImage({ setFile }: { setFile: Dispatch<SetStateAction<string | null>> }) {
+export default function FormImage({
+    file,
+    setFile,
+}: {
+    setFile: Dispatch<SetStateAction<string | null>>
+    file: string | null
+}) {
     const [isLoading, setLoading] = useState(false)
-    const [urlImage, setUrl] = useState<string | null>(null)
 
     const setImage = async (e: ChangeEvent<HTMLInputElement>) => {
         setLoading(true)
@@ -23,7 +28,6 @@ export default function FormImage({ setFile }: { setFile: Dispatch<SetStateActio
                 const res = await sendForm.json()
                 if (res.data) {
                     setFile(res.data)
-                    setUrl(res.data)
                 }
                 toast(res.message, {
                     position: 'top-center',
@@ -49,7 +53,7 @@ export default function FormImage({ setFile }: { setFile: Dispatch<SetStateActio
                 />
                 {isLoading ? (
                     <Skeleton className='flex rounded-full w-32 h-32' />
-                ) : !urlImage ? (
+                ) : !file ? (
                     <Image
                         alt='Subir imagen perfil'
                         src='/img/perfil/user.png'
@@ -58,7 +62,7 @@ export default function FormImage({ setFile }: { setFile: Dispatch<SetStateActio
                 ) : (
                     <Image
                         alt='Foto de perfil del usuario'
-                        src={urlImage}
+                        src={file}
                         className='w-32 h-32 rounded-full object-cover'
                     />
                 )}
