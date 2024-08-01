@@ -1,7 +1,8 @@
 import { IconType } from 'react-icons'
+export type TipoSangre = 'A+' | 'A-' | 'B+' | 'B-' | 'AB+' | 'AB-' | 'O+' | 'O-'
 
 export type Paciente = Usuario & {
-    factorSanguineo: string
+    factorSanguineo: TipoSangre
     estadoDelPaciente: 'Pre-trasplante' | 'Trasplantado' | 'Donante'
     organoEnfermo: string
 }
