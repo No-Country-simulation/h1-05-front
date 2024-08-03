@@ -27,6 +27,7 @@ export default function PacienteCard({ paciente }: { paciente: Paciente }) {
                         <p className='font-bold text-2xl'>
                             {paciente.firstName} {paciente.lastName}
                         </p>
+                        <p className='text-xl'>Órgano requerido: {paciente.organoEnfermo}</p>
                         {/* {findPatologia && <p className='italic'>Patología: {findPatologia.detalle}</p>} */}
                     </div>
                 </div>

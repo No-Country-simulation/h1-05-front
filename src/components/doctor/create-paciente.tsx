@@ -1,9 +1,9 @@
 'use client'
-import { Button, Modal, ModalBody, ModalContent, ModalFooter, useDisclosure, Tooltip } from '@nextui-org/react'
+import { Modal, ModalBody, ModalContent, useDisclosure, Tooltip } from '@nextui-org/react'
 import { FaCirclePlus } from 'react-icons/fa6'
+import RegisterPatient from '../form-register-patient'
 
 export default function CreatePaciente() {
-    const handleReset = () => {}
     const { isOpen, onOpenChange } = useDisclosure()
 
     return (
@@ -22,21 +22,19 @@ export default function CreatePaciente() {
                     <FaCirclePlus className='text-2xl text-white' />
                 </div>
             </Tooltip>
-            <Modal placement='center' isOpen={isOpen} onOpenChange={onOpenChange} backdrop='blur'>
+            <Modal
+                size='lg'
+                placement='center'
+                scrollBehavior='inside'
+                isOpen={isOpen}
+                onOpenChange={onOpenChange}
+                backdrop='blur'
+            >
                 <ModalContent>
                     <ModalBody className='py-6'>
                         <h3 className='text-2xl font-bold'>Crear nuevo paciente</h3>
-                        <p>Ingrese todos los datos del paciente</p>
-                        <p>---FORMULARIO PACIENTE---</p>
+                        <RegisterPatient />
                     </ModalBody>
-                    <ModalFooter className='flex flex-row justify-between'>
-                        <Button color='warning' onClick={onOpenChange}>
-                            Cerrar
-                        </Button>
-                        <Button color='secondary' onClick={handleReset}>
-                            Crear nuevo paciente
-                        </Button>
-                    </ModalFooter>
                 </ModalContent>
             </Modal>
         </>

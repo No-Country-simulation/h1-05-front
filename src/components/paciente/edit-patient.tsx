@@ -39,11 +39,11 @@ export default function EditPatient() {
                     Authorization: `Bearer ${token}`,
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ form }),
+                body: JSON.stringify(form),
             })
             if (res.ok) {
-                const data = await res.json()
-                console.log({ enviado: form, respuestaBack: data })
+                // const data = await res.json()
+                // console.log({ enviado: form, respuestaBack: data })
                 if (token) getPatient(token, patient.id.toString())
                 toast.success('Perfil actualizado correctamente')
             } else {

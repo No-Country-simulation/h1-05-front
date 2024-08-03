@@ -97,7 +97,7 @@ export default function PatientPage({ params }: { params: { patientId: string } 
                 </div>
             </div>
             <div className='px-6'>
-                <Tabs color='secondary' variant='bordered' className='pt-3'>
+                <Tabs color='secondary' variant='bordered' className='pt-3 flex flex-wrap'>
                     <Tab key='tratamientos' title='Ficha Clínica'>
                         <div>
                             <TreatmentsList patientId={patient.id} />
