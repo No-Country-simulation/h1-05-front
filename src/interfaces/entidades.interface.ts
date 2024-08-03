@@ -23,16 +23,21 @@ export type Farmacia = {
 
 export type Medicamento = {
     id: number
-    descripcion: string
-    farmaciaId: number
-    tratamientoId: number
-    patologiaId: number
+    medicationKey: string
+    notes: string[]
+    dosage: string
+    frequency: string
+    duration: string
 }
 
 export type Tratamiento = {
-    id: number
-    descripcion: string
-    patologiaId: number
+    description: string
+    notes: string[]
+    startDate: string
+    endDate: string
+    patient: Paciente
+    doctor: Medico
+    medications?: Medicamento[]
 }
 
 export type Patologia = {

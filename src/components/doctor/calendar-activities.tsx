@@ -2,10 +2,11 @@
 import Activity from './single-activity'
 import { eventsUserStore } from '@/store/events-user'
 import LoadingArray from './loading-array'
-import { Paciente } from '@/interfaces/user.interface'
+import { patientsStore } from '@/store/patients-store'
 
-export default function CalendarActivities({ patient }: { patient?: Paciente }) {
+export default function CalendarActivities() {
     const { events, isLoading } = eventsUserStore()
+    const { patient } = patientsStore()
 
     const filterEvents = events.filter((event) => {
         if (!patient) {

@@ -3,8 +3,8 @@ import { create } from 'zustand'
 
 interface EventsStore {
     events: Evento[]
-    getEvents: (token: string) => void
     isLoading: boolean
+    getEvents: (token: string) => void
 }
 
 export const eventsUserStore = create<EventsStore>((set, get) => ({
@@ -19,10 +19,14 @@ export const eventsUserStore = create<EventsStore>((set, get) => ({
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
+                    cache: 'no-cache',
                 })
                 if (res.ok) {
                     const data: Evento[] = await res.json()
-                    set({ events: data })
+                    const events = data.sort((a, b) => {
+                        return new Date(a.startDatetime).getTime() - new Date(b.startDatetime).getTime()
+                    })
+                    set({ events })
                 }
             }
         } catch (error) {

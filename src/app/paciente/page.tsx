@@ -1,6 +1,4 @@
 'use client'
-
-import ChatBot from '@/components/chatbot'
 import CalendarActivities from '@/components/doctor/calendar-activities'
 import SearchVideos from '@/components/search-tutovideos'
 import { userStore } from '@/store/user-store'
