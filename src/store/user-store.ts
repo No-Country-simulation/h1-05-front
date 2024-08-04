@@ -7,7 +7,7 @@ interface UserStore {
     token: null | string
     loadingStore: boolean
     setLoadingStore: (value: boolean) => void
-    setUser: (user: Medico) => void
+    setUser: (user: Medico | Paciente) => void
     setToken: (token: string) => void
     cerrarSesion: () => void
 }
