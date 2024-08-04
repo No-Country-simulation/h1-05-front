@@ -42,7 +42,7 @@ export default function FormImage({
 
     return (
         <>
-            <p className='text-default-500'>Sube tu foto de perfil:</p>
+            <p className='text-default-500'>Foto de perfil (opcional)</p>
             <div className='relative w-fit mx-auto bg-slate-700/50 p-2 rounded-full my-2'>
                 <input
                     type='file'

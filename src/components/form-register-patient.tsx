@@ -7,8 +7,6 @@ import {
     Checkbox,
     DatePicker,
     Input,
-    Radio,
-    RadioGroup,
     Select,
     Selection,
     SelectItem,
@@ -27,7 +25,16 @@ import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { DateValue, parseDate, today, getLocalTimeZone } from '@internationalized/date'
 import Link from 'next/link'
+import { TipoSangre } from '@/interfaces/user.interface'
+import { userStore } from '@/store/user-store'
 
+type Estado = 'Pre-trasplante' | 'Trasplantado' | 'Donante'
+
+interface DatosPaciente {
+    factorSanguineo: TipoSangre
+    estadoDelPaciente: Estado
+    organoEnfermo: string | null
+}
 type Inputs = {
     name: string
     lastName: string
@@ -44,13 +51,28 @@ type Inputs = {
     password: string
     confirmPassword: string
 }
+// {
+// "factorSanguineo": "string",
+// "estadoDelPaciente": "string",
+// "organoEnfermo": "string"
+//   }
 
-export default function RegisterComponent() {
+const sangre: TipoSangre[] = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-']
+const estado = ['Pre-trasplante', 'Trasplantado', 'Donante']
+const organos = ['Riñón', 'Corazón', 'Hígado', 'Páncreas', 'Pulmón', 'Huesos', 'Córnea', 'Médula']
+
+export default function RegisterPatient() {
     const [step, setStep] = useState<1 | 2>(1)
     const [passPower, setPassPower] = useState(0)
     const [passColor, setPassColor] = useState<'danger' | 'warning' | 'success'>('danger')
-    const [role, setRole] = useState<'MEDICO' | 'PACIENTE' | 'ADMINISTRADOR'>('MEDICO')
+    const [role, setRole] = useState<'MEDICO' | 'PACIENTE' | 'ADMINISTRADOR'>('PACIENTE')
     const [file, setFile] = useState<string | null>(null)
+    const [dataPatient, setDataPatient] = useState<DatosPaciente>({
+        factorSanguineo: 'A+',
+        estadoDelPaciente: 'Donante',
+        organoEnfermo: null,
+    })
+    const { token } = userStore()
     const [isLoading, setLoading] = useState(false)
     const [fechaNacimiento, setNacimiento] = useState<DateValue>(parseDate('1990-12-12'))
     const [deseaDonar, setDonar] = useState(true)
@@ -66,7 +88,6 @@ export default function RegisterComponent() {
     } = useForm<Inputs>({
         resolver: zodResolver(registerSchema),
     })
-    const route = useRouter()
 
     // PENDING: handleSubmit, useStates
     const handleFormSend = async (data: Inputs) => {
@@ -78,9 +99,10 @@ export default function RegisterComponent() {
             ? file
             : 'https://img.freepik.com/premium-vector/doctor-profile-with-medical-service-icon_617655-48.jpg'
         try {
-            const res = await fetch(`${url}/auth/register`, {
+            const res = await fetch(`${url}/patients`, {
                 method: 'POST',
                 headers: {
+                    Authorization: `Bearer ${token}`,
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
@@ -98,14 +120,15 @@ export default function RegisterComponent() {
                     photo: newPhoto,
                     fechaNacimiento: fechaNacimiento.toDate(timeZoneClient).toISOString(),
                     deseaDonar,
+                    factorSanguineo: dataPatient.factorSanguineo,
+                    estadoDelPaciente: dataPatient.estadoDelPaciente,
+                    organoEnfermo: dataPatient.organoEnfermo,
                 }),
             })
-
-            const dataRes = await res.json()
-            console.log({ dataRes })
+            console.log({ res })
             if (res.ok) {
                 toast.success('Registrado exitosamente')
-                route.push('/register/success')
+                // route.push('/register/success')
             } else {
                 toast.error('No se pudo realizar el registro, intente más tarde.')
             }
@@ -136,12 +159,6 @@ export default function RegisterComponent() {
             setValue('ciudad', ciudad)
         }
         trigger('ciudad')
-    }
-
-    const handleSelectEspecialidad = (keys: Selection) => {
-        const arrEsp = Array.from(keys) as string[]
-        setValue('especialidad', arrEsp)
-        trigger('especialidad')
     }
 
     const validatePassword = (password: string): number => {
@@ -179,10 +196,26 @@ export default function RegisterComponent() {
         else setPassColor('success')
     }, [watch('password'), watch('confirmPassword')])
 
+    useEffect(() => {
+        setValue('especialidad', ['30040'])
+        setValue('medicalLicense', '11111111')
+    }, [])
+
     return (
         <form onSubmit={handleSubmit(handleFormSend)}>
             {step === 1 && (
                 <>
+                    {/* <RadioGroup
+                        orientation='horizontal'
+                        onValueChange={(value) => setRole(value)}
+                        label='Selecciona tipo de cuenta:'
+                        className='mb-4'
+                        color='secondary'
+                        defaultValue={role}
+                    >
+                        <Radio value='MEDICO'>Médico</Radio>
+                        <Radio value='PACIENTE'>Paciente</Radio>
+                    </RadioGroup> */}
                     <FormImage file={file} setFile={setFile} />
                 </>
             )}
@@ -269,7 +302,7 @@ export default function RegisterComponent() {
                 </div>
             )}
 
-            {step !== 1 && role === 'MEDICO' && (
+            {step !== 1 && role === 'PACIENTE' && (
                 <div className='grid gap-5 grid-cols-1 md:grid-cols-2 mb-5'>
                     <DatePicker
                         label='Fecha de nacimiento'
@@ -292,13 +325,13 @@ export default function RegisterComponent() {
                         label='Teléfono'
                         {...register('phoneNumber')}
                     />
-                    <Input
+                    {/* <Input
                         color='secondary'
                         errorMessage={errors.medicalLicense?.message}
                         isInvalid={errors.medicalLicense?.message ? true : false}
                         label='Nº Matrícula'
                         {...register('medicalLicense')}
-                    />
+                    /> */}
                     <Input
                         color='secondary'
                         errorMessage={errors.dni?.message}
@@ -306,7 +339,7 @@ export default function RegisterComponent() {
                         label='DNI/Documento'
                         {...register('dni')}
                     />
-                    <Select
+                    {/* <Select
                         label='Seleccione especialidad'
                         color='secondary'
                         errorMessage={errors.especialidad?.message}
@@ -321,7 +354,7 @@ export default function RegisterComponent() {
                                 {especialidad.nombre}
                             </SelectItem>
                         ))}
-                    </Select>
+                    </Select> */}
 
                     <Autocomplete
                         onInputChange={handleProvinciaSelect}
@@ -353,6 +386,40 @@ export default function RegisterComponent() {
                             </AutocompleteItem>
                         ))}
                     </Autocomplete>
+                    <Select
+                        color='secondary'
+                        label='Estado actual del paciente'
+                        defaultSelectedKeys={[estado[0]]}
+                        onChange={(e) =>
+                            setDataPatient({ ...dataPatient, estadoDelPaciente: e.target.value as Estado })
+                        }
+                    >
+                        {estado.map((est) => (
+                            <SelectItem key={est}>{est}</SelectItem>
+                        ))}
+                    </Select>
+                    <Select
+                        color='secondary'
+                        label='Factor sanguineo'
+                        defaultSelectedKeys={[sangre[0]]}
+                        onChange={(e) =>
+                            setDataPatient({ ...dataPatient, factorSanguineo: e.target.value as TipoSangre })
+                        }
+                    >
+                        {sangre.map((tipo) => (
+                            <SelectItem key={tipo}>{tipo}</SelectItem>
+                        ))}
+                    </Select>
+                    <Select
+                        color='secondary'
+                        label={`Órgano necesario`}
+                        defaultSelectedKeys={[organos[0]]}
+                        onChange={(e) => setDataPatient({ ...dataPatient, organoEnfermo: e.target.value })}
+                    >
+                        {organos.map((organo) => (
+                            <SelectItem key={organo}>{organo}</SelectItem>
+                        ))}
+                    </Select>
                 </div>
             )}
             <Button color='secondary' className='w-full mb-4' onClick={() => setStep(step === 1 ? 2 : 1)}>

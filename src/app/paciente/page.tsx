@@ -1,6 +1,4 @@
 'use client'
-
-import ChatBot from '@/components/chatbot'
 import CalendarActivities from '@/components/doctor/calendar-activities'
 import SearchVideos from '@/components/search-tutovideos'
 import { userStore } from '@/store/user-store'
@@ -11,7 +9,7 @@ export default function DashboardPage() {
     const { user } = userStore()
     const { diaNombre, mesNombre, diaNumero } = dateFormat()
     return (
-        <div className='pb-16 sm:pb-3'>
+        <>
             <div className='relative header-doctor flex flex-col items-start justify-between shadow-md mb-6 text-white'>
                 <div className='absolute inset-0 bg-purple-950/90 z-10'></div>
                 <div className='flex gap-3 w-full md:w-fit justify-between items-center md:flex-row-reverse p-4 z-20'>
@@ -32,6 +30,6 @@ export default function DashboardPage() {
                 <CalendarActivities />
                 <SearchVideos />
             </div>
-        </div>
+        </>
     )
 }

@@ -3,24 +3,31 @@ import { create } from 'zustand'
 
 interface EventsStore {
     events: Evento[]
-    getEvents: (token: string) => void
     isLoading: boolean
+    getEvents: (token: string) => void
 }
 
-export const eventsUserStore = create<EventsStore>((set) => ({
+export const eventsUserStore = create<EventsStore>((set, get) => ({
     events: [],
     getEvents: async (token) => {
-        set({ isLoading: true })
         try {
-            const url = process.env.NEXT_PUBLIC_URL_BACK
-            const res = await fetch(`${url}/events`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            })
-            if (res.ok) {
-                const data: Evento[] = await res.json()
-                set({ events: data })
+            set({ isLoading: true })
+            const { events } = get()
+            if (events.length === 0) {
+                const url = process.env.NEXT_PUBLIC_URL_BACK
+                const res = await fetch(`${url}/events`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                    cache: 'no-cache',
+                })
+                if (res.ok) {
+                    const data: Evento[] = await res.json()
+                    const events = data.sort((a, b) => {
+                        return new Date(a.startDatetime).getTime() - new Date(b.startDatetime).getTime()
+                    })
+                    set({ events })
+                }
             }
         } catch (error) {
             console.log(error)

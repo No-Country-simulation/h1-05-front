@@ -1,6 +1,8 @@
 'use client'
 import useAudioSpeech from '@/hooks/useAudio'
+import { Paciente } from '@/interfaces/user.interface'
 import { userStore } from '@/store/user-store'
+import { calculateAge } from '@/utils/calculateAge'
 import {
     Avatar,
     Button,
@@ -17,22 +19,36 @@ import { ChatCompletionMessageParam } from 'openai/resources/index.mjs'
 import { useEffect, useState } from 'react'
 import { FaMicrophone } from 'react-icons/fa6'
 import { RiUserVoiceFill } from 'react-icons/ri'
+import { toast } from 'sonner'
 
 export default function ChatBot() {
     const [messages, setMessages] = useState<ChatCompletionMessageParam[]>([])
     const [input, setInput] = useState('')
     const [loading, setLoading] = useState(false)
+    const [isFirstMessage, setFirstMessage] = useState(true)
     const { user } = userStore()
     const { isOpen, onOpen, onOpenChange } = useDisclosure()
     const { isListening, startListening, stopListening, transcript, setTranscript } = useAudioSpeech()
     const sendMessages = async (chatMessages: ChatCompletionMessageParam[]) => {
+        if (!user) throw toast('Se cerró su sesión, inicie nuevamente...')
+        const usuario = user as Paciente
+        console.log({ usuario })
+        const firstMessage = {
+            role: 'assistant',
+            content: `El usuario se llama ${usuario.firstName} ${usuario.lastName}, 
+                tiene ${calculateAge(usuario.fechaNacimiento)} años, 
+                su estado clínico es "${usuario.estadoDelPaciente}", 
+                tiene dificultades en el órgano del ${usuario.organoEnfermo}.`,
+        }
+        const mensajes = isFirstMessage ? [firstMessage, ...chatMessages] : [...chatMessages]
+        setFirstMessage(false)
         const res = await fetch(`${process.env.NEXT_PUBLIC_URL_FRONT}/api/ia`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                chat: [...chatMessages],
+                chat: [...mensajes],
             }),
             cache: 'no-store',
         })
@@ -43,11 +59,11 @@ export default function ChatBot() {
         try {
             setLoading(true)
             if (input.trim()) {
-                const userMessage: ChatCompletionMessageParam = { content: input, role: 'user' }
-                setMessages((prevMessages) => [...prevMessages, userMessage])
+                let userMessage: ChatCompletionMessageParam[] = [{ content: input, role: 'user' }]
+                setMessages((prevMessages) => [...prevMessages, ...userMessage])
                 setInput('')
                 setTranscript('')
-                const res = await sendMessages([...messages, userMessage])
+                const res = await sendMessages([...messages, ...userMessage])
                 if (res.ok) {
                     const messagesRes = await res.json()
                     setMessages((prevMessages) => [...prevMessages, messagesRes])
@@ -66,9 +82,10 @@ export default function ChatBot() {
         setInput(transcript)
     }, [transcript])
 
+    if (!user) return null
     return (
         <>
-            <div onClick={onOpen} className='fixed bottom-3 right-3 hover:cursor-pointer'>
+            <div onClick={onOpen} className='fixed bottom-24 md:bottom-6 right-3 hover:cursor-pointer'>
                 <Tooltip
                     isOpen={!isOpen}
                     size='lg'
@@ -97,7 +114,7 @@ export default function ChatBot() {
                                         <div className='p-3 rounded-lg max-w-xs break-words bg-yellow-100 text-gray-800'>
                                             <p className='text-xs italic'>Asistente IA</p>
                                             <p>
-                                                ¡Hola {user?.firstName}! soy tu asistente médico virtual, estoy para
+                                                ¡Hola {user.firstName}! soy tu asistente médico virtual, estoy para
                                                 ayudarte en tus dudas y problemas.
                                             </p>
                                         </div>

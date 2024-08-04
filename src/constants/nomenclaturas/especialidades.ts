@@ -38,7 +38,7 @@ export const especialidades = [
     { id: 30037, nombre: 'Infectología Infantil' },
     { id: 30038, nombre: 'Medicina del Deporte' },
     { id: 30039, nombre: 'Medicina del Trabajo' },
-    { id: 30040, nombre: 'Medicina General y/o Medicina de Familia' },
+    { id: 30040, nombre: 'Medicina General' },
     { id: 30041, nombre: 'Medicina Legal' },
     { id: 30042, nombre: 'Medicina Nuclear' },
     { id: 30043, nombre: 'Medicina Paliativa' },

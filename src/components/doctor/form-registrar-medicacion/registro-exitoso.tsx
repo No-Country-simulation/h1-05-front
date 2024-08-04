@@ -1,11 +1,9 @@
 'use client'
 import LogoVertical from '@/components/logo-vertical'
 import { Button, Image } from '@nextui-org/react'
-import { useRouter } from 'next/navigation'
 import { IoMdAdd } from 'react-icons/io'
 // import CerrarSesion from '@/components/cerrar-sesion'
 export default function registroExitoso({ setStep, setSliderValue }: { setStep: Function; setSliderValue: Function }) {
-    const route = useRouter()
     const handleAddMedicine = () => {
         setSliderValue(20)
         setStep(1)

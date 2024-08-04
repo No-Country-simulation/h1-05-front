@@ -7,7 +7,7 @@ import { IoIosArrowBack } from 'react-icons/io'
 export default function itemPerfil() {
     const route = useRouter()
     return (
-        <div className='bg-[url("/img/background.svg")] bg-cover p-4 min-h-screen'>
+        <div className='max-w-md mx-auto p-4 min-h-screen'>
             <div className='flex items-center justify-center'>
                 <IoIosArrowBack className='text-[#9A41CE] flex-none' onClick={() => route.back()} />
                 <h1 className='font-bold  flex-auto text-center'>Dirección</h1>

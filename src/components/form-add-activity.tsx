@@ -5,12 +5,12 @@ import { FormEvent, useEffect, useState } from 'react'
 import { userStore } from '@/store/user-store'
 import { eventsUserStore } from '@/store/events-user'
 import { toast } from 'sonner'
-import { Paciente } from '@/interfaces/user.interface'
+import { patientsStore } from '@/store/patients-store'
 
 const tiposEventos = ['REUNION', 'CONFERENCIA', 'CITA', 'OTRO']
 
-export default function AddActividad({ fecha, patient }: { fecha: string; patient?: Paciente }) {
-    const [pacientes, setPacientes] = useState<Paciente[]>([])
+export default function AddActividad({ fecha }: { fecha: string }) {
+    const { patient, patients, getPatients } = patientsStore()
     const { getEvents } = eventsUserStore()
     const { token } = userStore()
     const { user } = userStore()
@@ -26,27 +26,7 @@ export default function AddActividad({ fecha, patient }: { fecha: string; patien
     const dateCalendar = parseDate(fecha)
 
     useEffect(() => {
-        const loadMedicos = async (token: string) => {
-            interface ResponsePatients {
-                page: number
-                size: number
-                total: number
-                pages: number
-                items: Paciente[]
-            }
-
-            const url = process.env.NEXT_PUBLIC_URL_BACK
-            const res = await fetch(`${url}/patients?page=1&size=20&doctorId=0`, {
-                headers: {
-                    accept: '*/*',
-                    Authorization: `Bearer ${token}`,
-                },
-            })
-
-            const data: ResponsePatients = await res.json()
-            setPacientes(data.items)
-        }
-        if (token) loadMedicos(token)
+        if (token) getPatients(token)
     }, [token])
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -156,9 +136,9 @@ export default function AddActividad({ fecha, patient }: { fecha: string; patien
                 minLength={5}
                 isRequired
             />
-            {pacientes.length > 0 && !patient && (
-                <Select label='Elija un usuario (opcional)' onSelectionChange={handleSelectionPacientes}>
-                    {pacientes.map((paciente) => (
+            {patients.length > 0 && !patient && (
+                <Select label='Elija un paciente (opcional)' onSelectionChange={handleSelectionPacientes}>
+                    {patients.map((paciente) => (
                         <SelectItem key={paciente.id}>{`${paciente.firstName} ${paciente.lastName}`}</SelectItem>
                     ))}
                 </Select>

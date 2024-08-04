@@ -29,7 +29,7 @@ export default function MenuDoctor() {
             if (currentDate > expDate) {
                 cerrarSesion()
                 toast.error('Su sesión ha expirado, ingrese nuevamente')
-                route.push('/login')
+                route.push('login')
             } else {
                 if (infoToken.role !== 'MEDICO') {
                     route.push('/')

@@ -92,8 +92,27 @@ export default function LoginForm() {
             clearTimeout(timeoutId)
             if (res.ok) {
                 const data: UserLogin = await res.json()
-                console.log({ infoToken: tokenData(data.accessToken), data })
-                setUser(data.user)
+                if (data.user.role === 'PACIENTE') {
+                    const paciente = data.user
+                    const res = await fetch(`${urlBack}/patients/${paciente.patientId}`, {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization: `Bearer ${data.accessToken}`,
+                        },
+                        signal: controller.signal,
+                    })
+                    if (res.ok) {
+                        const dataPatient: Paciente = await res.json()
+                        setUser({
+                            ...data.user,
+                            estadoDelPaciente: dataPatient.estadoDelPaciente,
+                            factorSanguineo: dataPatient.factorSanguineo,
+                            organoEnfermo: dataPatient.organoEnfermo,
+                        })
+                    }
+                } else {
+                    setUser(data.user)
+                }
                 setToken(data.accessToken)
                 return data
             }
