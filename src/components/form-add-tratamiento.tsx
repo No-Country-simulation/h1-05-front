@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { MdAddBox, MdDelete } from 'react-icons/md'
 import { toast } from 'sonner'
 import { parseDate, today, getLocalTimeZone } from '@internationalized/date'
+import Medicacion from './doctor/form-registrar-medicacion/medicamento'
 
 type PostTratamiento = {
     description: string
@@ -14,12 +15,14 @@ type PostTratamiento = {
     patientId: number
     doctorId: number
 }
+
 export default function AddTratamiento({ patient }: { patient: Paciente }) {
     const { user, token } = userStore()
     const [date, setDate] = useState({
         start: parseDate(today(getLocalTimeZone()).toString()),
         end: parseDate(today(getLocalTimeZone()).add({ months: 1 }).toString()),
     })
+    const [listMedicine, setListMedicines] = useState<string[]>([])
     if (!user) return null
     const initialForm = {
         description: '',
@@ -178,6 +181,12 @@ export default function AddTratamiento({ patient }: { patient: Paciente }) {
                     required
                 />
             </div>
+            <Medicacion list={listMedicine} setList={setListMedicines} />
+
+            {/* {listMedicine.map((medicina) => (
+                <AddMedicacion key={medicina} medicationKey={medicina} />
+            ))} */}
+
             <Button color='secondary' type='submit' isDisabled={loading} isLoading={loading}>
                 Crear Tratamiento
             </Button>

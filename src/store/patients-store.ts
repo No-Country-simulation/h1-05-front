@@ -17,6 +17,7 @@ interface ResponseAPI {
     pages: number
     items: Paciente[]
 }
+
 const url = process.env.NEXT_PUBLIC_URL_BACK
 
 export const patientsStore = create<PatientsStore>((set, get) => ({

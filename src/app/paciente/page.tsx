@@ -28,7 +28,6 @@ export default function DashboardPage() {
             </div>
             <div className='max-w-7xl mx-auto'>
                 <CalendarActivities />
-                <SearchVideos />
             </div>
         </>
     )

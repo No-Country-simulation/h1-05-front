@@ -65,3 +65,27 @@ export const profileMenu = {
         },
     ],
 }
+
+export const profileMenuPatient = {
+    datosPersonales: [
+        {
+            Icono: RiMapPin2Line,
+            titulo: 'Dirección',
+            link: `perfil/direccion`,
+        },
+    ],
+    datosSeguridad: [
+        {
+            Icono: MdOutlineLock,
+            titulo: 'Contraseña',
+            link: `perfil/contrasena`,
+        },
+    ],
+    sesion: [
+        {
+            Icono: IoMdNotificationsOutline,
+            titulo: 'Notificaciones',
+            link: `perfil/notificacion`,
+        },
+    ],
+}

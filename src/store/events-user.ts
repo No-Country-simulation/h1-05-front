@@ -5,10 +5,12 @@ interface EventsStore {
     events: Evento[]
     isLoading: boolean
     getEvents: (token: string) => void
+    cleanEvents: () => void
 }
 
 export const eventsUserStore = create<EventsStore>((set, get) => ({
     events: [],
+    cleanEvents: () => set({ events: [] }),
     getEvents: async (token) => {
         try {
             set({ isLoading: true })

@@ -1,22 +1,22 @@
 'use client'
+import { eventsUserStore } from '@/store/events-user'
 import { userStore } from '@/store/user-store'
-import { Button } from '@nextui-org/react'
 import { useRouter } from 'next/navigation'
 import { MdOutlineLogout } from 'react-icons/md'
 
 export default function CerrarSesion() {
-    const { cerrarSesion } = userStore() //cliente
-    const route = useRouter() //cliente x2
+    const { cerrarSesion } = userStore()
+    const { cleanEvents } = eventsUserStore()
+    const route = useRouter()
 
     const handleCerrarSesion = () => {
         cerrarSesion()
+        cleanEvents()
         route.push('/login')
     }
+
     return (
         <>
-            {/* <Button color='secondary' onClick={handleCerrarSesion}>
-                Cerrar sesión
-            </Button> */}
             <div
                 className='flex flex-row items-center gap-4 bg-white rounded-full hover:cursor-pointer'
                 onClick={handleCerrarSesion}

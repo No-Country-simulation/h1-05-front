@@ -1,4 +1,4 @@
-import { Medico } from '@/interfaces/user.interface'
+import { Medico, Paciente } from '@/interfaces/user.interface'
 import { Image } from '@nextui-org/react'
 
 export default function HeaderDoctor({ medico }: { medico: Medico }) {
@@ -10,8 +10,9 @@ export default function HeaderDoctor({ medico }: { medico: Medico }) {
                     <h2 className='text-3xl'>
                         {medico.firstName} {medico.lastName}
                     </h2>
-                    <p className='font-bold text-sm italic'>{medico.email}</p>
-                    <p className='font-bold text-sm'>Teléfono: +{medico.phone}</p>
+                    <p className='font-bold text-sm'>{medico.email}</p>
+                    <p className='font-bold text-sm'>tel: +{medico.phone}</p>
+                    <p className='font-bold text-sm'>DNI: {medico.nroDocumento}</p>
                     {medico.especialidad && <p className='font-bold text-sm'>Especialidad: {medico.especialidad}</p>}
                 </div>
             </div>
